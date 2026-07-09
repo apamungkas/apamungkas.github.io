@@ -1,0 +1,4 @@
+Telemetry
+| where ts > ago(30m)
+| project ts, deviceId, humidity
+| order by ts asc

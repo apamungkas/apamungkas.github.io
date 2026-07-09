@@ -1,0 +1,2 @@
+Telemetry
+| summarize arg_max(ts, *) by deviceId

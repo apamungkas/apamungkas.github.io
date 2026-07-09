@@ -1,0 +1,3 @@
+Telemetry
+| where ts > ago(5m)
+| summarize AvgTemp = avg(tempC) by deviceId

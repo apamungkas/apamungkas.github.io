@@ -1,0 +1,4 @@
+Telemetry
+| where ts > ago(30m)
+| project ts, deviceId, tempC
+| order by ts asc
