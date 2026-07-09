@@ -1,9 +1,266 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Angger's Lab</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angger's Lab — Demos & Proof of Concepts</title>
+    <meta name="description" content="A portal of hands-on labs and demos: IoT, Microsoft Fabric, Azure AI Foundry, and more.">
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-soft: #121a33;
+            --card: #161f3d;
+            --card-hover: #1d2952;
+            --text: #e6ebf5;
+            --muted: #9aa7c7;
+            --accent: #4f9cff;
+            --accent-2: #7c5cff;
+            --border: #26304f;
+            --tag: #1f2c52;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+        /* Hero */
+        header.hero {
+            position: relative;
+            overflow: hidden;
+            padding: 96px 0 72px;
+            background:
+                radial-gradient(1200px 500px at 15% -10%, rgba(124, 92, 255, 0.25), transparent 60%),
+                radial-gradient(1000px 500px at 90% 0%, rgba(79, 156, 255, 0.22), transparent 55%),
+                var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 13px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(79, 156, 255, 0.1);
+            border: 1px solid rgba(79, 156, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 999px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 6vw, 52px);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #ffffff, #b9c6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p.lead {
+            margin-top: 18px;
+            max-width: 640px;
+            font-size: clamp(16px, 2.2vw, 19px);
+            color: var(--muted);
+        }
+
+        /* Section */
+        main { padding: 64px 0 96px; }
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h2 { font-size: 24px; letter-spacing: -0.01em; }
+        .section-head .count { color: var(--muted); font-size: 14px; }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: var(--card-hover);
+            border-color: rgba(79, 156, 255, 0.5);
+        }
+
+        .card .icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            margin-bottom: 18px;
+        }
+
+        .card h3 { font-size: 20px; letter-spacing: -0.01em; }
+
+        .card p.desc {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 15px;
+            flex-grow: 1;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .tag {
+            font-size: 12px;
+            color: var(--muted);
+            background: var(--tag);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .card .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 10px;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff;
+        }
+        .btn.primary:hover { filter: brightness(1.08); }
+
+        .btn.ghost {
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn.ghost:hover { border-color: var(--accent); }
+
+        .arrow { transition: transform 0.15s ease; }
+        .btn:hover .arrow { transform: translateX(3px); }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Angger's Lab</h1>
+    <header class="hero">
+        <div class="wrap">
+            <span class="eyebrow">Labs &amp; Demos</span>
+            <h1>Angger's Lab</h1>
+            <p class="lead">
+                A collection of hands-on labs, demos, and proof-of-concepts spanning
+                IoT, Microsoft Fabric, Azure AI, and cloud-native architectures — built to
+                explore ideas and showcase what's possible.
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap">
+            <div class="section-head">
+                <h2>Featured Demos</h2>
+                <span class="count">1 demo available</span>
+            </div>
+
+            <div class="grid">
+                <article class="card">
+                    <div class="icon">🌡️</div>
+                    <h3>Smart Environment Alerting System</h3>
+                    <p class="desc">
+                        An end-to-end real-time IoT monitoring solution. M5Stack devices stream
+                        temperature &amp; humidity into Microsoft Fabric, where threshold-based
+                        alerts trigger a notebook that enriches the alert with LLM-generated
+                        recommendations and delivers it via Telegram.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">IoT</span>
+                        <span class="tag">M5Stack</span>
+                        <span class="tag">Azure Functions</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Azure AI Foundry</span>
+                        <span class="tag">Real-Time Dashboard</span>
+                        <span class="tag">Telegram</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn primary" href="smart_environment_alerting_system/README.md">
+                            View Demo <span class="arrow">→</span>
+                        </a>
+                        <a class="btn ghost" href="https://github.com/apamungkas/apamungkas.github.io/tree/main/smart_environment_alerting_system">
+                            Source
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="wrap">
+            <span>© <span id="year"></span> Angger's Lab</span>
+            <a href="https://github.com/apamungkas/apamungkas.github.io">github.com/apamungkas</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
