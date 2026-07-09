@@ -11,6 +11,9 @@ This project demonstrates an end-to-end **real-time IoT monitoring and intellige
 
 The solution detects abnormal temperature/humidity conditions and automatically sends a **Telegram alert enriched with LLM-generated recommended actions**.
 
+![M5Stack devices with ENV sensor streaming live telemetry](images/01-hardware-setup.jpg)
+*M5StickC Plus2 and M5Stack Fire reading temperature & humidity from the ENV Unit sensor.*
+
 ## Features
 
 - Real-time telemetry ingestion
@@ -76,6 +79,9 @@ const char* INGEST_URL = "https://<function-app>.azurewebsites.net/api/ingest";
 
 Device sends JSON payload every few seconds.
 
+![Device displaying ENV telemetry on screen](images/02-device-telemetry.jpg)
+*Each device shows the current temperature and humidity locally while streaming to the cloud.*
+
 ## Azure Function (Ingest)
 
 Receives HTTP JSON payload and forwards to Event Hub.
@@ -107,6 +113,9 @@ Telemetry
 | take 10
 ```
 
+![Fabric Eventstream routing telemetry from Event Hub to Eventhouse](images/03-eventstream.jpg)
+*Eventstream ingests telemetry from Azure Event Hub and lands it into the Eventhouse (KQL DB), with a live data preview.*
+
 ## Real-Time Dashboard
 
 Latest telemetry tile:
@@ -116,6 +125,9 @@ Telemetry
 ```
 
 Pin this query as a KPI/Card tile.
+
+![Fabric Real-Time Dashboard with KPI cards and trend charts](images/04-realtime-dashboard.jpg)
+*Real-Time Dashboard showing latest readings, 5-minute averages, and temperature/humidity trends per device.*
 
 ## Create Alert (Activator)
 
@@ -176,6 +188,9 @@ Actions:
 - Inspect vents
 Escalation: Notify facilities if persists >30 minutes
 ```
+
+![Telegram bot delivering an LLM-enriched environment alert](images/05-telegram-alert.jpg)
+*The Telegram bot delivers alerts enriched with LLM-generated risk, likely causes, actions, and escalation guidance.*
 
 ## Demo Steps
 
