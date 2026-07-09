@@ -189,7 +189,7 @@ Actions:
 Escalation: Notify facilities if persists >30 minutes
 ```
 
-![Telegram bot delivering an LLM-enriched environment alert](images/1771153730344.jpg)
+![Telegram bot delivering an LLM-enriched environment alert](images/05-telegram-alert.jpg)
 *The Telegram bot delivers alerts enriched with LLM-generated risk, likely causes, actions, and escalation guidance.*
 
 ## Demo Steps
