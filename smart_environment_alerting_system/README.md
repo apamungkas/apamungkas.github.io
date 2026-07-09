@@ -11,7 +11,7 @@ This project demonstrates an end-to-end **real-time IoT monitoring and intellige
 
 The solution detects abnormal temperature/humidity conditions and automatically sends a **Telegram alert enriched with LLM-generated recommended actions**.
 
-![M5Stack devices with ENV sensor streaming live telemetry](images/02-device-telemetry.jpg)
+![M5Stack devices with ENV sensor streaming live telemetry](images/01-hardware.jpg)
 *M5StickC Plus2 and M5Stack Fire reading temperature & humidity from the ENV Unit sensor.*
 
 ## Features
