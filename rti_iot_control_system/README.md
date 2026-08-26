@@ -54,7 +54,7 @@ flowchart LR
 - M5Stack Fire + unit ENV II/III/IV, kabel USB-C
 - Arduino IDE + library `M5Unified`, `M5UnitENV`, `PubSubClient`, `ArduinoJson`
 - Azure subscription (IoT Hub, Functions) + Azure CLI
-- Microsoft Fabric workspace (kapasitas F2+ atau trial)
+- Microsoft Fabric workspace (kapasitas F2+)
 - Node.js 18+ dan Azure Functions Core Tools v4
 
 
