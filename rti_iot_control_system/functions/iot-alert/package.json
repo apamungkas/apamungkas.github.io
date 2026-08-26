@@ -1,0 +1,13 @@
+{
+  "name": "iot-alert-function",
+  "version": "1.0.0",
+  "description": "Jembatan Fabric Activator -> Azure IoT Hub Direct Method (closed-loop cloud-to-edge)",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "azure-iothub": "^1.16.0"
+  }
+}
