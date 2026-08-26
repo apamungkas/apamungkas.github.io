@@ -1,4 +1,4 @@
-# Demo IoT ↔ Azure ↔ Microsoft Fabric — Real-Time Intelligence & Two-Way Control
+# Demo Real-Time Intelligence & Two-Way Control (IoT ↔ Azure ↔ Microsoft Fabric)
 
 Demo end-to-end **komunikasi dua arah** antara edge device dan cloud:
 telemetry mengalir dari **M5Stack Fire** → **Azure IoT Hub** → **Microsoft Fabric**
