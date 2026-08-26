@@ -1,0 +1,47 @@
+// =============================================================================
+// 01-create-table.kql  —  Skema Eventhouse untuk telemetry M5Stack Fire
+// -----------------------------------------------------------------------------
+// Jalankan di KQL Queryset (Eventhouse > KQL Database > New > KQL Queryset),
+// ATAU biarkan Eventstream membuat tabel otomatis saat menambah destination.
+// File ini berguna bila Anda ingin kontrol penuh atas skema & mapping.
+// =============================================================================
+
+// --- Tabel utama telemetry ---
+// Catatan waktu: TIDAK ada kolom waktu di sini. Payload device tidak mengirim
+// timestamp, dan enqueued time IoT Hub adalah properti sistem (bukan body JSON)
+// sehingga tak bisa dipetakan di dialog Map schema. Waktu diambil dari fungsi
+// bawaan Kusto ingestion_time() di query dashboard.
+.create table telemetry (
+    deviceId:    string,
+    temperature: real,
+    humidity:    real,
+    pressure:    real,
+    vibration:   real,
+    noiseLevel:  int,
+    status:      string
+)
+
+// --- JSON mapping: memetakan field JSON dari Eventstream ke kolom tabel ---
+.create table telemetry ingestion json mapping "telemetry_mapping"
+```
+[
+  {"column":"deviceId",    "path":"$.deviceId",    "datatype":"string"},
+  {"column":"temperature", "path":"$.temperature", "datatype":"real"},
+  {"column":"humidity",    "path":"$.humidity",    "datatype":"real"},
+  {"column":"pressure",    "path":"$.pressure",    "datatype":"real"},
+  {"column":"vibration",   "path":"$.vibration",   "datatype":"real"},
+  {"column":"noiseLevel",  "path":"$.noiseLevel",  "datatype":"int"},
+  {"column":"status",      "path":"$.status",      "datatype":"string"}
+]
+```
+
+// --- Retensi data: cukup 7 hari untuk demo (opsional) ---
+.alter-merge table telemetry policy retention softdelete = 7d
+
+// --- Pastikan ingestion time aktif (default sudah on) agar ingestion_time() bisa dipakai ---
+.alter table telemetry policy ingestiontime true
+
+// --- Cek data setelah Eventstream aktif (waktu dari ingestion_time()) ---
+telemetry
+| extend enqueuedTime = ingestion_time()
+| take 20
