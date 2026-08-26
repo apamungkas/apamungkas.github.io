@@ -57,24 +57,6 @@ flowchart LR
 - Microsoft Fabric workspace (kapasitas F2+ atau trial)
 - Node.js 18+ dan Azure Functions Core Tools v4
 
-## Konfigurasi rahasia (WAJIB sebelum menjalankan)
-
-File berisi kredensial **tidak** di-commit (lihat [.gitignore](.gitignore)). Setelah clone,
-salin file contoh dan isi nilai Anda:
-
-```powershell
-Copy-Item firmware/m5stack-fire/config.example.h firmware/m5stack-fire/config.h
-Copy-Item functions/iot-alert/local.settings.json.example functions/iot-alert/local.settings.json
-```
-
-Lalu isi:
-- `config.h` → SSID/password WiFi, host IoT Hub, device ID, primary key
-- `local.settings.json` → `IOTHUB_CONNECTION_STRING` (policy `service`)
-
-## Keamanan
-
-- Jangan commit `config.h` maupun `local.settings.json` (sudah di-gitignore).
-- Untuk produksi: DPS + X.509 untuk device, Managed Identity + Key Vault untuk Function.
 
 ## Lisensi
 
