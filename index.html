@@ -287,12 +287,12 @@
             <h1>Angger's Lab</h1>
             <p class="lead">
                 A collection of hands-on labs, demos, and proof-of-concepts spanning
-                IoT, Microsoft Fabric, Azure AI, and cloud-native architectures — built to
-                explore ideas and showcase what's possible.
+                IoT, Microsoft Fabric digital twins, Azure AI, and cloud-native architectures —
+                built to explore ideas and showcase what's possible.
             </p>
             <div class="stats">
                 <div class="stat">
-                    <div class="num">2</div>
+                    <div class="num">3</div>
                     <div class="label">Live demos</div>
                 </div>
                 <div class="stat">
@@ -316,9 +316,9 @@
             <div class="section-head">
                 <div>
                     <h2>Featured Demos</h2>
-                    <p class="sub">Real, working proof-of-concepts you can explore end to end — from device to cloud to alert.</p>
+                    <p class="sub">Working proof-of-concepts you can explore end to end — from connected devices and factory assets to real-time insight and action.</p>
                 </div>
-                <span class="count">2 live · more on the way</span>
+                <span class="count">3 demos · more on the way</span>
             </div>
 
             <div class="grid">
@@ -374,6 +374,32 @@
                     </div>
                 </article>
 
+                <article class="card">
+                    <div class="icon">🏭</div>
+                    <h3>Factory Digital Twin with Microsoft Fabric</h3>
+                    <p class="desc">
+                        An end-to-end digital twin for a fictitious manufacturer with 3 plants,
+                        6 production lines, and 24 machines. A telemetry simulator feeds
+                        Microsoft Fabric Eventstream and Eventhouse, where KQL powers machine
+                        health, anomaly, and OEE insights. Fabric IQ models the factory ontology,
+                        while a real-time dashboard and Activator alerts bring operations to life.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Digital Twin</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Eventstream</span>
+                        <span class="tag">Eventhouse (KQL)</span>
+                        <span class="tag">Fabric IQ Ontology</span>
+                        <span class="tag">Real-Time Dashboard</span>
+                        <span class="tag">Fabric Activator</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn primary" href="https://github.com/apamungkas/apamungkas.github.io/tree/main/fabric_digital_twin">
+                            View Demo <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </article>
+
                 <article class="card soon">
                     <span class="badge">Coming soon</span>
                     <div class="icon">🤖</div>
@@ -397,27 +423,27 @@
     <section class="band">
         <div class="wrap">
             <h2>How the demos come together</h2>
-            <p class="sub">Most labs here follow the same event-driven, cloud-native pattern — capture data at the edge, stream it, analyze in real time, and act automatically.</p>
+            <p class="sub">These labs connect devices and factory assets to the cloud — streaming telemetry, modeling operations, surfacing real-time insight, and triggering action.</p>
             <div class="steps">
                 <div class="step">
                     <div class="n">1</div>
                     <h4>Capture</h4>
-                    <p>IoT devices and sensors read the physical world and emit lightweight JSON telemetry.</p>
+                    <p>Connected devices and factory machines produce telemetry about the physical world.</p>
                 </div>
                 <div class="step">
                     <div class="n">2</div>
                     <h4>Stream</h4>
-                    <p>Azure Functions and Event Hub ingest events and pipe them into Microsoft Fabric.</p>
+                    <p>Eventstream, Azure Functions, and IoT Hub route events into Microsoft Fabric.</p>
                 </div>
                 <div class="step">
                     <div class="n">3</div>
                     <h4>Analyze</h4>
-                    <p>Fabric Eventhouse and Real-Time Dashboards turn raw streams into live insight.</p>
+                    <p>Eventhouse, digital twin models, and real-time dashboards turn telemetry into operational insight.</p>
                 </div>
                 <div class="step">
                     <div class="n">4</div>
                     <h4>Act</h4>
-                    <p>Activator triggers workflows and AI enriches alerts before delivering them to you.</p>
+                    <p>Fabric Activator and connected workflows surface alerts and help teams respond.</p>
                 </div>
             </div>
         </div>
@@ -436,6 +462,7 @@
                 <span class="chip">Eventhouse (KQL)</span>
                 <span class="chip">Real-Time Dashboard</span>
                 <span class="chip">Fabric Activator</span>
+                <span class="chip">Fabric IQ Ontology</span>
                 <span class="chip">Azure IoT Hub</span>
                 <span class="chip">IoT Hub Direct Method</span>
                 <span class="chip">Power Automate</span>
