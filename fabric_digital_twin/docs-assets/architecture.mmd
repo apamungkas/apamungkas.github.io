@@ -1,0 +1,37 @@
+flowchart LR
+    Simulator["Telemetry simulator<br/>Synthetic sensor data"]
+    MasterData["Plant master data<br/>Sites · lines · machines<br/>Work orders"]
+
+    subgraph Fabric["Microsoft Fabric"]
+        direction LR
+
+        Eventstream["Eventstream<br/>Custom Endpoint"]
+        Eventhouse["Eventhouse<br/>KQL Database · telemetry<br/>Health · anomaly · OEE"]
+        Dashboard["Real-Time Dashboard<br/>Plant map · machine health<br/>Temperature · vibration · OEE"]
+        Lakehouse["Lakehouse<br/>Dimension &amp; work-order data"]
+        Ontology["Fabric IQ Ontology<br/>Site → Line → Machine<br/>→ Work Order"]
+        Activator["Fabric Activator<br/>Temperature &amp; vibration<br/>threshold rules"]
+        Email["Email alert"]
+
+        Eventstream -->|Ingest| Eventhouse
+        Eventhouse -->|KQL| Dashboard
+        Eventhouse -->|Alert rules| Activator
+        Activator --> Email
+        Lakehouse -->|Dimensions| Ontology
+    end
+
+    Simulator -->|Live telemetry| Eventstream
+    MasterData -->|Load reference data| Lakehouse
+    Eventhouse -.->|Time series| Ontology
+    Eventhouse -.->|OneLake shortcut · no copy| Lakehouse
+
+    classDef source fill:#E8EEF5,stroke:#4B647A,stroke-width:2px,color:#152B40
+    classDef ingestion fill:#E6F4F1,stroke:#147D70,stroke-width:2px,color:#103B37
+    classDef analytics fill:#E8F0FE,stroke:#3569B8,stroke-width:2px,color:#17365D
+    classDef action fill:#FFF3D6,stroke:#AE6B00,stroke-width:2px,color:#553300
+    class Simulator,MasterData source
+    class Eventstream,Eventhouse,Dashboard ingestion
+    class Lakehouse,Ontology analytics
+    class Activator,Email action
+
+    style Fabric fill:#F5FAF9,stroke:#81B8AC,stroke-width:2px,color:#173D39
