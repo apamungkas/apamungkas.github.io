@@ -1,0 +1,15 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "background": "#F5F8FC",
+    "lineColor": "#16324F",
+    "edgeLabelBackground": "#F5F8FC",
+    "fontFamily": "Segoe UI, Arial, sans-serif",
+    "fontSize": "20px"
+  },
+  "flowchart": {
+    "nodeSpacing": 70,
+    "rankSpacing": 90,
+    "curve": "linear"
+  }
+}
