@@ -1,0 +1,81 @@
+table dim_machine
+	lineageTag: 8cac0520-bc5e-42c5-bd38-2467cf734a2c
+
+	column MachineId
+		dataType: string
+		lineageTag: 422b1173-b8e4-4010-8906-90ad29d48b6e
+		sourceColumn: MachineId
+
+	column MachineName
+		dataType: string
+		lineageTag: b8d68108-2225-4ff0-aed5-e8ea3e62a0ec
+		sourceColumn: MachineName
+
+	column MachineType
+		dataType: string
+		lineageTag: f507ab42-d42e-4e78-8ee3-2b23334a8912
+		sourceColumn: MachineType
+
+	column LineId
+		dataType: string
+		lineageTag: 4ba7c00d-0e82-4abe-97c7-421880fd3160
+		sourceColumn: LineId
+
+	column SiteId
+		dataType: string
+		lineageTag: d113cdb1-5ffd-4371-9278-c5e8a6ac2ebe
+		sourceColumn: SiteId
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 2ab5c919-4932-4f70-906d-b15c0106c71b
+		sourceColumn: Manufacturer
+
+	column Model
+		dataType: string
+		lineageTag: 0030ace6-fa4d-41c4-8779-0cae426231bc
+		sourceColumn: Model
+
+	column SerialNumber
+		dataType: string
+		lineageTag: de66347c-fbd9-4972-9f9e-f6479f32c998
+		sourceColumn: SerialNumber
+
+	column InstallDate
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0ab120f6-0974-4e3c-81be-7135183c3af2
+		sourceColumn: InstallDate
+
+	column RatedPowerKw
+		dataType: double
+		lineageTag: 6ea8eca1-4df0-4479-b7c1-f0be9195f7cc
+		sourceColumn: RatedPowerKw
+
+	column NominalRpm
+		dataType: double
+		lineageTag: cd2765a7-98d8-42bb-a6ad-3d92a1805bf2
+		sourceColumn: NominalRpm
+
+	column TempMaxC
+		dataType: double
+		lineageTag: c3719210-fa1a-4365-bc11-d7c4fa58caef
+		sourceColumn: TempMaxC
+
+	column VibMaxMmS
+		dataType: double
+		lineageTag: 3933e586-87d2-4752-802e-d906217407b5
+		sourceColumn: VibMaxMmS
+
+	column Criticality
+		dataType: string
+		lineageTag: 29275b06-5e0f-4713-ba22-900ebf1d53b3
+		sourceColumn: Criticality
+
+	partition dim_machine = entity
+		mode: directLake
+		source
+			entityName: dim_machine
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

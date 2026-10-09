@@ -1,0 +1,18 @@
+# Runtime artifacts (recreated automatically when you run the scripts/simulator)
+**/__pycache__/
+*.pyc
+simulator/simulator.log
+simulator/simulator.pid
+ids.json
+
+# Node (if you reinstall dependencies to re-run video/record.cjs or video/postprocess.cjs)
+node_modules/
+package-lock.json
+
+# Never commit real connection strings/secrets
+*.env
+.secrets/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db

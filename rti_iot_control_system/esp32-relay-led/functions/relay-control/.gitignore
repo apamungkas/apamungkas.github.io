@@ -1,0 +1,3 @@
+# local.settings.json berisi kredensial — jangan commit
+local.settings.json
+node_modules/

@@ -1,0 +1,6 @@
+.create table Telemetry (
+  deviceId: string,
+  ts: datetime,
+  tempC: real,
+  humidity: real
+)

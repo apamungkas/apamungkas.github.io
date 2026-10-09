@@ -1,0 +1,77 @@
+WorkOrderId,MachineId,WorkOrderType,Priority,Status,Description,OpenedAt,ClosedAt,Technician,DowntimeMinutes,CostIdr
+WO-2026-01049,M-KRW-L2-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-10-16T15:58:00Z,2025-10-16T18:16:00Z,Putri Maharani,11,15000000.0
+WO-2026-01006,M-CKR-L1-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-10-17T07:47:00Z,2025-10-17T13:48:00Z,Rina Kusuma,23,5000000.0
+WO-2026-01037,M-KRW-L1-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-10-19T10:52:00Z,2025-10-19T23:21:00Z,Fajar Nugroho,9,12000000.0
+WO-2026-01032,M-KRW-L1-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-10-25T15:31:00Z,2025-10-25T21:47:00Z,Agus Pratama,6,3500000.0
+WO-2026-01073,M-SBY-L2-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-11-01T21:27:00Z,2025-11-02T06:25:00Z,Siti Rahmawati,166,2250000.0
+WO-2026-01012,M-CKR-L1-04,Preventive,P3,Closed,Lubrication and filter replacement,2025-11-12T08:19:00Z,2025-11-12T17:02:00Z,Agus Pratama,41,10750000.0
+WO-2026-01038,M-KRW-L2-01,Preventive,P3,Closed,Lubrication and filter replacement,2025-11-12T16:06:00Z,2025-11-12T20:40:00Z,Budi Santoso,13,10000000.0
+WO-2026-01039,M-KRW-L2-01,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-11-16T18:11:00Z,2025-11-17T00:01:00Z,Siti Rahmawati,64,14750000.0
+WO-2026-01058,M-SBY-L1-03,Preventive,P3,Closed,Scheduled preventive maintenance,2025-11-19T20:12:00Z,2025-11-20T04:44:00Z,Andi Wijaya,5,5000000.0
+WO-2026-01047,M-KRW-L2-03,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-11-22T00:55:00Z,2025-11-22T09:39:00Z,Fajar Nugroho,238,2250000.0
+WO-2026-01018,M-CKR-L2-02,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-11-24T17:06:00Z,2025-11-25T00:56:00Z,Putri Maharani,166,6250000.0
+WO-2026-01059,M-SBY-L1-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-11-27T17:35:00Z,2025-11-28T02:28:00Z,Siti Rahmawati,54,8750000.0
+WO-2026-01011,M-CKR-L1-04,Preventive,P3,Closed,Lubrication and filter replacement,2025-12-01T14:57:00Z,2025-12-02T03:10:00Z,Dewi Anggraini,59,9000000.0
+WO-2026-01031,M-KRW-L1-03,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-12-03T23:05:00Z,2025-12-04T10:24:00Z,Siti Rahmawati,89,9500000.0
+WO-2026-01015,M-CKR-L2-01,Preventive,P3,Closed,Scheduled preventive maintenance,2025-12-04T08:57:00Z,2025-12-04T19:23:00Z,Andi Wijaya,17,4500000.0
+WO-2026-01029,M-KRW-L1-02,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2025-12-07T06:43:00Z,2025-12-07T09:18:00Z,Budi Santoso,85,14000000.0
+WO-2026-01048,M-KRW-L2-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2025-12-19T18:14:00Z,2025-12-20T03:29:00Z,Rina Kusuma,52,3250000.0
+WO-2026-01020,M-CKR-L2-03,Preventive,P3,Closed,Scheduled preventive maintenance,2025-12-22T13:27:00Z,2025-12-22T22:09:00Z,Putri Maharani,19,5500000.0
+WO-2026-01027,M-KRW-L1-01,Preventive,P3,Closed,Lubrication and filter replacement,2025-12-24T17:46:00Z,2025-12-24T21:22:00Z,Rina Kusuma,36,11500000.0
+WO-2026-01021,M-CKR-L2-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-01-04T19:40:00Z,2026-01-05T00:11:00Z,Fajar Nugroho,10,1500000.0
+WO-2026-01068,M-SBY-L2-02,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-01-14T20:10:00Z,2026-01-15T05:10:00Z,Dewi Anggraini,172,4750000.0
+WO-2026-01065,M-SBY-L2-01,Preventive,P3,Closed,Scheduled preventive maintenance,2026-01-15T16:10:00Z,2026-01-15T19:34:00Z,Fajar Nugroho,6,12500000.0
+WO-2026-01041,M-KRW-L2-01,Preventive,P3,Closed,Scheduled preventive maintenance,2026-01-27T03:04:00Z,2026-01-27T13:11:00Z,Fajar Nugroho,38,9500000.0
+WO-2026-01014,M-CKR-L2-01,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-02-06T11:49:00Z,2026-02-06T18:15:00Z,Dewi Anggraini,85,10000000.0
+WO-2026-01067,M-SBY-L2-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-02-13T09:50:00Z,2026-02-13T15:01:00Z,Andi Wijaya,49,2750000.0
+WO-2026-01044,M-KRW-L2-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-02-17T15:36:00Z,2026-02-17T21:08:00Z,Dewi Anggraini,49,4500000.0
+WO-2026-01057,M-SBY-L1-03,Preventive,P3,Closed,Scheduled preventive maintenance,2026-02-23T18:06:00Z,2026-02-24T04:15:00Z,Andi Wijaya,5,5750000.0
+WO-2026-01060,M-SBY-L1-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-02-25T12:28:00Z,2026-02-26T01:42:00Z,Rina Kusuma,205,6500000.0
+WO-2026-01034,M-KRW-L1-03,Preventive,P3,Closed,Lubrication and filter replacement,2026-02-28T11:12:00Z,2026-02-28T14:47:00Z,Dewi Anggraini,21,8750000.0
+WO-2026-01005,M-CKR-L1-02,Preventive,P3,Closed,Lubrication and filter replacement,2026-03-02T10:27:00Z,2026-03-02T21:25:00Z,Budi Santoso,57,12250000.0
+WO-2026-01036,M-KRW-L1-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-03-02T12:43:00Z,2026-03-02T21:10:00Z,Siti Rahmawati,14,1500000.0
+WO-2026-01019,M-CKR-L2-03,Preventive,P3,Closed,Lubrication and filter replacement,2026-03-11T11:20:00Z,2026-03-11T21:21:00Z,Putri Maharani,27,9250000.0
+WO-2026-01046,M-KRW-L2-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-03-14T23:03:00Z,2026-03-15T09:08:00Z,Agus Pratama,4,7000000.0
+WO-2026-01004,M-CKR-L1-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-03-22T16:31:00Z,2026-03-22T22:10:00Z,Agus Pratama,60,14000000.0
+WO-2026-01072,M-SBY-L2-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-03-25T04:48:00Z,2026-03-25T09:42:00Z,Budi Santoso,101,13750000.0
+WO-2026-01017,M-CKR-L2-02,Preventive,P3,Closed,Lubrication and filter replacement,2026-03-31T11:53:00Z,2026-03-31T19:04:00Z,Fajar Nugroho,50,11250000.0
+WO-2026-01030,M-KRW-L1-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-04-10T16:11:00Z,2026-04-10T21:06:00Z,Agus Pratama,20,6750000.0
+WO-2026-01052,M-SBY-L1-01,Preventive,P3,Closed,Scheduled preventive maintenance,2026-04-12T10:26:00Z,2026-04-12T17:58:00Z,Siti Rahmawati,8,15000000.0
+WO-2026-01040,M-KRW-L2-01,Preventive,P3,Closed,Lubrication and filter replacement,2026-04-12T21:54:00Z,2026-04-13T03:25:00Z,Siti Rahmawati,56,12500000.0
+WO-2026-01026,M-KRW-L1-01,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-05-06T03:36:00Z,2026-05-06T06:44:00Z,Budi Santoso,49,4250000.0
+WO-2026-01069,M-SBY-L2-03,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-05-10T16:51:00Z,2026-05-11T00:45:00Z,Siti Rahmawati,87,2750000.0
+WO-2026-01054,M-SBY-L1-02,Preventive,P3,Closed,Scheduled preventive maintenance,2026-05-10T18:04:00Z,2026-05-11T00:02:00Z,Dewi Anggraini,31,11250000.0
+WO-2026-01033,M-KRW-L1-03,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-05-13T05:34:00Z,2026-05-13T17:01:00Z,Budi Santoso,108,8500000.0
+WO-2026-01001,M-CKR-L1-01,Preventive,P3,Closed,Scheduled preventive maintenance,2026-05-15T14:11:00Z,2026-05-16T01:02:00Z,Dewi Anggraini,38,14750000.0
+WO-2026-01016,M-CKR-L2-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-05-17T02:40:00Z,2026-05-17T06:56:00Z,Fajar Nugroho,26,8250000.0
+WO-2026-01042,M-KRW-L2-02,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-05-17T12:40:00Z,2026-05-17T23:39:00Z,Dewi Anggraini,67,7000000.0
+WO-2026-01051,M-SBY-L1-01,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-05-28T19:02:00Z,2026-05-29T05:26:00Z,Agus Pratama,43,2250000.0
+WO-2026-01053,M-SBY-L1-01,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-06-01T12:55:00Z,2026-06-02T00:10:00Z,Rina Kusuma,94,1500000.0
+WO-2026-01028,M-KRW-L1-02,Preventive,P3,Closed,Scheduled preventive maintenance,2026-06-02T18:15:00Z,2026-06-03T03:53:00Z,Budi Santoso,42,14250000.0
+WO-2026-01066,M-SBY-L2-02,Preventive,P3,Closed,Scheduled preventive maintenance,2026-06-03T14:43:00Z,2026-06-03T22:19:00Z,Agus Pratama,21,2500000.0
+WO-2026-01071,M-SBY-L2-03,Preventive,P3,Closed,Lubrication and filter replacement,2026-06-10T08:02:00Z,2026-06-10T17:35:00Z,Fajar Nugroho,22,10500000.0
+WO-2026-01050,M-SBY-L1-01,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-06-12T04:36:00Z,2026-06-12T09:13:00Z,Budi Santoso,117,11500000.0
+WO-2026-01022,M-CKR-L2-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-06-15T09:33:00Z,2026-06-15T20:02:00Z,Putri Maharani,6,13750000.0
+WO-2026-01062,M-SBY-L1-04,Preventive,P3,Closed,Scheduled preventive maintenance,2026-06-19T02:45:00Z,2026-06-19T09:58:00Z,Putri Maharani,32,6000000.0
+WO-2026-01009,M-CKR-L1-03,Preventive,P3,Closed,Scheduled preventive maintenance,2026-06-23T07:30:00Z,2026-06-23T17:25:00Z,Putri Maharani,41,7250000.0
+WO-2026-01043,M-KRW-L2-02,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-07-14T08:08:00Z,2026-07-14T18:15:00Z,Agus Pratama,13,4250000.0
+WO-2026-01013,M-CKR-L1-04,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-07-21T15:30:00Z,2026-07-21T23:55:00Z,Andi Wijaya,8,14000000.0
+WO-2026-01061,M-SBY-L1-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-07-26T11:50:00Z,2026-07-26T22:42:00Z,Putri Maharani,151,10250000.0
+WO-2026-01002,M-CKR-L1-01,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-07-28T21:22:00Z,2026-07-29T00:21:00Z,Andi Wijaya,108,2000000.0
+WO-2026-01035,M-KRW-L1-04,Preventive,P3,Closed,Scheduled preventive maintenance,2026-08-08T11:55:00Z,2026-08-08T20:07:00Z,Dewi Anggraini,45,11500000.0
+WO-2026-01023,M-CKR-L2-04,Preventive,P3,Closed,Scheduled preventive maintenance,2026-08-09T19:02:00Z,2026-08-10T04:44:00Z,Rina Kusuma,0,2250000.0
+WO-2026-01056,M-SBY-L1-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-08-17T06:14:00Z,2026-08-17T09:48:00Z,Fajar Nugroho,38,14250000.0
+WO-2026-01055,M-SBY-L1-02,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-08-28T11:06:00Z,2026-08-28T20:56:00Z,Budi Santoso,31,7250000.0
+WO-2026-01045,M-KRW-L2-02,Preventive,P3,Closed,Lubrication and filter replacement,2026-08-30T07:04:00Z,2026-08-30T16:56:00Z,Andi Wijaya,28,11250000.0
+WO-2026-01063,M-SBY-L2-01,Preventive,P3,Closed,Lubrication and filter replacement,2026-09-04T09:07:00Z,2026-09-04T17:03:00Z,Siti Rahmawati,20,5000000.0
+WO-2026-01025,M-KRW-L1-01,Preventive,P3,Closed,Lubrication and filter replacement,2026-09-05T02:01:00Z,2026-09-05T04:41:00Z,Fajar Nugroho,58,8250000.0
+WO-2026-01007,M-CKR-L1-03,Inspection,P3,Closed,Routine vibration and thermal inspection,2026-09-05T05:43:00Z,2026-09-05T14:23:00Z,Agus Pratama,3,2250000.0
+WO-2026-01070,M-SBY-L2-03,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-09-07T05:47:00Z,2026-09-07T11:31:00Z,Andi Wijaya,71,9750000.0
+WO-2026-01003,M-CKR-L1-02,Preventive,P3,Closed,Scheduled preventive maintenance,2026-09-09T03:34:00Z,2026-09-09T12:12:00Z,Siti Rahmawati,26,8750000.0
+WO-2026-01010,M-CKR-L1-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-09-16T22:53:00Z,2026-09-17T11:01:00Z,Budi Santoso,223,10750000.0
+WO-2026-01064,M-SBY-L2-01,Preventive,P3,Closed,Scheduled preventive maintenance,2026-09-25T06:02:00Z,2026-09-25T19:40:00Z,Budi Santoso,7,10250000.0
+WO-2026-01024,M-CKR-L2-04,Corrective,P2,Closed,Replace worn seal and recalibrate sensor,2026-09-25T08:48:00Z,2026-09-25T15:45:00Z,Siti Rahmawati,232,5250000.0
+WO-2026-01008,M-CKR-L1-03,Preventive,P3,Closed,Lubrication and filter replacement,2026-09-26T07:01:00Z,2026-09-26T14:28:00Z,Andi Wijaya,29,8500000.0
+WO-2026-01074,M-KRW-L2-03,Corrective,P1,Closed,"Conveyor drive fault - motor encoder replaced, line restarted",2026-10-07T07:02:00Z,2026-10-07T07:44:00Z,Fajar Nugroho,45,18500000.0
+WO-2026-01075,M-CKR-L2-04,Corrective,P1,Open,"Rising vibration on air compressor - suspected bearing wear, inspect and plan bearing replacement",2026-10-08T12:15:00Z,,Agus Pratama,0,0.0
+WO-2026-01076,M-SBY-L1-01,Corrective,P2,InProgress,Injection molder barrel overheating - check heater band and mold cooling circuit,2026-10-08T13:30:00Z,,Siti Rahmawati,0,0.0

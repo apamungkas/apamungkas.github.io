@@ -1,0 +1,26 @@
+/// A production line belongs to a plant.
+entityRelationship 'Line In Site'
+	lineageTag: a7b00ecd-6690-4bc8-9afa-8a08839a763d
+	fromEntity: ProductionLine
+	toEntity: Site
+
+	backingConfiguration
+		relationship: rel_line_site
+
+/// A machine is installed on a production line.
+entityRelationship 'Machine On Line'
+	lineageTag: 3c546cf0-e09c-49b6-99ca-7e2bc61dc96e
+	fromEntity: Machine
+	toEntity: ProductionLine
+
+	backingConfiguration
+		relationship: rel_machine_line
+
+/// A maintenance work order is raised against a machine.
+entityRelationship 'Work Order For Machine'
+	lineageTag: f6e34218-5078-46d0-a35c-93e655201413
+	fromEntity: WorkOrder
+	toEntity: Machine
+
+	backingConfiguration
+		relationship: rel_workorder_machine

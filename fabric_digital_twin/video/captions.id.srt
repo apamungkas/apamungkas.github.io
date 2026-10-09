@@ -1,0 +1,47 @@
+1
+00:00:00,000 --> 00:00:04,641
+Getaran kompresor ini naik pelan-pelan selama 3 hari…
+
+2
+00:00:04,641 --> 00:00:15,314
+…dan digital twin di Microsoft Fabric menangkapnya sebelum mesin rusak.
+
+3
+00:00:15,314 --> 00:00:20,196
+Skenario demo: 3 pabrik, 6 lini produksi, 24 mesin (data simulasi).
+
+4
+00:00:20,196 --> 00:00:27,749
+6 jam terakhir: 1 mesin kritis, yaitu kompresor di lini perakitan Cikarang.
+
+5
+00:00:27,749 --> 00:00:32,879
+Lonjakan suhu mesin injeksi dan OEE tiap lini juga terpantau real-time.
+
+6
+00:00:32,879 --> 00:00:38,061
+Datanya mengalir lewat Eventstream: telemetri 24 mesin, setiap 10 detik…
+
+7
+00:00:38,061 --> 00:00:43,008
+…langsung masuk ke Eventhouse, siap dianalisis dalam hitungan detik.
+
+8
+00:00:43,008 --> 00:00:46,995
+Ontology di Fabric IQ menjadi model digital twin-nya:
+
+9
+00:00:46,995 --> 00:00:57,552
+Pabrik → Lini → Mesin → Work Order, lengkap dengan relasinya.
+
+10
+00:00:57,552 --> 00:01:03,171
+Tiap properti mesin terikat langsung ke tabel di Lakehouse, tanpa menyalin data.
+
+11
+00:01:03,171 --> 00:01:08,293
+Activator memantau aturan bisnis: getaran > 7,1 mm/s atau suhu > 95 °C…
+
+12
+00:01:08,293 --> 00:01:11,604
+…lalu otomatis mengirim alert lewat email.

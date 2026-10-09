@@ -1,0 +1,4 @@
+Telemetry
+| where ts > ago(5m)
+| where tempC > 35
+| summarize arg_max(ts, *) by deviceId

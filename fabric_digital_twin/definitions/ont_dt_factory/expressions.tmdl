@@ -1,0 +1,6 @@
+expression DatabaseQuery =
+		let
+		    database = Sql.Database("<your-sql-endpoint-host>.datawarehouse.fabric.microsoft.com", "<SQL_ENDPOINT_ID>")
+		in
+		    database
+	lineageTag: e4d13e2f-746e-4e95-b246-57104b4bd6b5

@@ -1,0 +1,96 @@
+/// A maintenance work order raised against a machine.
+entity WorkOrder
+	lineageTag: e81a4b51-3b65-46d5-b032-906557d49b2f
+	backingTable: maintenance_work_order
+	keyProperty: WorkOrderId
+	synonym maintenance
+	synonym workorder
+
+	/// Unique work order identifier.
+	property WorkOrderId
+		dataType: string
+		lineageTag: dec7ee3a-da0a-41c9-a656-6f0d07e9da77
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.WorkOrderId
+
+	/// Machine the work order is raised against.
+	property WorkOrderMachineId
+		dataType: string
+		lineageTag: f72f3c25-f723-44b0-a0e4-fb3d72f6ff2e
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.MachineId
+
+	/// Preventive, Inspection or Corrective.
+	property WorkOrderType
+		dataType: string
+		lineageTag: 3340c0ca-6eac-41bc-844e-dad412a09f7a
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.WorkOrderType
+
+	/// Priority P1 (urgent) to P3.
+	property Priority
+		dataType: string
+		lineageTag: 49165ecc-93f3-4498-9829-3508e7059177
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.Priority
+
+	/// Open, InProgress or Closed.
+	property WorkOrderStatus
+		dataType: string
+		lineageTag: b877e1c5-fe33-41c3-9c15-2f424b16201e
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.Status
+
+	/// Work description.
+	property Description
+		dataType: string
+		lineageTag: 6ce47ada-0afd-404c-8fb4-56eb7f2e48c1
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.Description
+
+	/// When the work order was opened (UTC).
+	property OpenedAt
+		dataType: dateTime
+		lineageTag: 7c82b032-44ab-4dff-9383-7ec8b5beb06a
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.OpenedAt
+
+	/// When the work order was closed (UTC).
+	property ClosedAt
+		dataType: dateTime
+		lineageTag: e1f41375-d175-4c96-9a2b-a59eec2e23a4
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.ClosedAt
+
+	/// Assigned technician.
+	property Technician
+		dataType: string
+		lineageTag: 3c29199e-566c-443e-81a2-73618f455c44
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.Technician
+
+	/// Machine downtime caused by the work (minutes).
+	property DowntimeMinutes
+		dataType: int64
+		lineageTag: c58f97c5-c110-4cb5-8332-ba2a5af7f8bb
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.DowntimeMinutes
+
+	/// Cost of the work in Indonesian rupiah.
+	property CostIdr
+		dataType: double
+		lineageTag: 4716b7d7-a01e-4341-b27a-8445c6c32a14
+
+		backingConfiguration
+			valueColumn: maintenance_work_order.CostIdr
+

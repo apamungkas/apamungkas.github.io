@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angger's Lab — Demos & Proof of Concepts</title>
+    <meta name="description" content="A portal of hands-on labs and demos: IoT, Microsoft Fabric, Azure AI Foundry, and more.">
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-soft: #121a33;
+            --card: #161f3d;
+            --card-hover: #1d2952;
+            --text: #e6ebf5;
+            --muted: #9aa7c7;
+            --accent: #4f9cff;
+            --accent-2: #7c5cff;
+            --border: #26304f;
+            --tag: #1f2c52;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+        /* Hero */
+        header.hero {
+            position: relative;
+            overflow: hidden;
+            padding: 96px 0 72px;
+            background:
+                radial-gradient(1200px 500px at 15% -10%, rgba(124, 92, 255, 0.25), transparent 60%),
+                radial-gradient(1000px 500px at 90% 0%, rgba(79, 156, 255, 0.22), transparent 55%),
+                var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 13px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(79, 156, 255, 0.1);
+            border: 1px solid rgba(79, 156, 255, 0.3);
+            padding: 6px 12px;
+            border-radius: 999px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: clamp(32px, 6vw, 52px);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(90deg, #ffffff, #b9c6ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p.lead {
+            margin-top: 18px;
+            max-width: 640px;
+            font-size: clamp(16px, 2.2vw, 19px);
+            color: var(--muted);
+        }
+
+        /* Section */
+        main { padding: 64px 0 96px; }
+
+        .section-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .section-head h2 { font-size: 24px; letter-spacing: -0.01em; }
+        .section-head .count { color: var(--muted); font-size: 14px; }
+
+        /* Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+        }
+
+        .card {
+            display: flex;
+            flex-direction: column;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            background: var(--card-hover);
+            border-color: rgba(79, 156, 255, 0.5);
+        }
+
+        .card .icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            margin-bottom: 18px;
+        }
+
+        .card h3 { font-size: 20px; letter-spacing: -0.01em; }
+
+        .card p.desc {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 15px;
+            flex-grow: 1;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 18px;
+        }
+
+        .tag {
+            font-size: 12px;
+            color: var(--muted);
+            background: var(--tag);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .card .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 10px;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #fff;
+        }
+        .btn.primary:hover { filter: brightness(1.08); }
+
+        .btn.ghost {
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        .btn.ghost:hover { border-color: var(--accent); }
+
+        .arrow { transition: transform 0.15s ease; }
+        .btn:hover .arrow { transform: translateX(3px); }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 44px;
+        }
+        .stat .num {
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.1;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .stat .label { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+        /* Section intro */
+        .section-head p.sub { color: var(--muted); font-size: 15px; margin-top: 6px; max-width: 620px; }
+
+        /* Coming soon card */
+        .card.soon {
+            border-style: dashed;
+            background: transparent;
+            justify-content: center;
+        }
+        .card.soon:hover { transform: none; background: rgba(255, 255, 255, 0.02); border-color: var(--border); }
+        .card.soon .badge {
+            align-self: flex-start;
+            font-size: 12px;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 4px 10px;
+            margin-bottom: 14px;
+        }
+        .card.soon h3 { color: var(--muted); }
+
+        /* Band */
+        .band { border-top: 1px solid var(--border); background: var(--bg-soft); }
+        .band .wrap { padding-top: 72px; padding-bottom: 72px; }
+        .band h2 { font-size: 24px; letter-spacing: -0.01em; }
+        .band p.sub { color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 640px; }
+
+        /* Steps */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 20px;
+            margin-top: 32px;
+        }
+        .step {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+        }
+        .step .n {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px;
+            font-weight: 700; font-size: 14px; color: #fff;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            margin-bottom: 14px;
+        }
+        .step h4 { font-size: 16px; margin-bottom: 6px; }
+        .step p { color: var(--muted); font-size: 14px; }
+
+        /* Tech chips */
+        .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+        .chip {
+            font-size: 14px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 32px 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+        footer .wrap {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <header class="hero">
+        <div class="wrap">
+            <span class="eyebrow">Labs &amp; Demos</span>
+            <h1>Angger's Lab</h1>
+            <p class="lead">
+                A collection of hands-on labs, demos, and proof-of-concepts spanning
+                IoT, Microsoft Fabric digital twins, Azure AI, and cloud-native architectures —
+                built to explore ideas and showcase what's possible.
+            </p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">3</div>
+                    <div class="label">Live demos</div>
+                </div>
+                <div class="stat">
+                    <div class="num">6+</div>
+                    <div class="label">Azure &amp; Fabric services</div>
+                </div>
+                <div class="stat">
+                    <div class="num">2</div>
+                    <div class="label">IoT devices</div>
+                </div>
+                <div class="stat">
+                    <div class="num">100%</div>
+                    <div class="label">End-to-end &amp; real-time</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="wrap">
+            <div class="section-head">
+                <div>
+                    <h2>Featured Demos</h2>
+                    <p class="sub">Working proof-of-concepts you can explore end to end — from connected devices and factory assets to real-time insight and action.</p>
+                </div>
+                <span class="count">3 demos · more on the way</span>
+            </div>
+
+            <div class="grid">
+                <article class="card">
+                    <div class="icon">🌡️</div>
+                    <h3>Smart Environment Alerting System</h3>
+                    <p class="desc">
+                        An end-to-end real-time IoT monitoring solution. M5Stack devices stream
+                        temperature &amp; humidity into Microsoft Fabric, where threshold-based
+                        alerts trigger a notebook that enriches the alert with LLM-generated
+                        recommendations and delivers it via Telegram.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">IoT</span>
+                        <span class="tag">M5Stack</span>
+                        <span class="tag">Azure Functions</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Azure AI Foundry</span>
+                        <span class="tag">Real-Time Dashboard</span>
+                        <span class="tag">Telegram</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn primary" href="https://github.com/apamungkas/apamungkas.github.io/tree/main/smart_environment_alerting_system">
+                            View Demo <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="icon">🔁</div>
+                    <h3>Real-Time IoT Control System</h3>
+                    <p class="desc">
+                        An end-to-end <strong>two-way</strong> IoT demo. Telemetry streams from an
+                        M5Stack Fire through Azure IoT Hub into Microsoft Fabric for real-time
+                        dashboards, while control commands flow back — Fabric Activator triggers
+                        Power Automate and an Azure Function that invokes an IoT Hub Direct Method
+                        to drive the device's LED, buzzer &amp; LCD.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">IoT</span>
+                        <span class="tag">M5Stack</span>
+                        <span class="tag">Azure IoT Hub</span>
+                        <span class="tag">Direct Method</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Fabric Activator</span>
+                        <span class="tag">Power Automate</span>
+                        <span class="tag">Azure Functions</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn primary" href="https://github.com/apamungkas/apamungkas.github.io/tree/main/rti_iot_control_system">
+                            View Demo <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="icon">🏭</div>
+                    <h3>Factory Digital Twin with Microsoft Fabric</h3>
+                    <p class="desc">
+                        An end-to-end digital twin for a fictitious manufacturer with 3 plants,
+                        6 production lines, and 24 machines. A telemetry simulator feeds
+                        Microsoft Fabric Eventstream and Eventhouse, where KQL powers machine
+                        health, anomaly, and OEE insights. Fabric IQ models the factory ontology,
+                        while a real-time dashboard and Activator alerts bring operations to life.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Digital Twin</span>
+                        <span class="tag">Microsoft Fabric</span>
+                        <span class="tag">Eventstream</span>
+                        <span class="tag">Eventhouse (KQL)</span>
+                        <span class="tag">Fabric IQ Ontology</span>
+                        <span class="tag">Real-Time Dashboard</span>
+                        <span class="tag">Fabric Activator</span>
+                    </div>
+                    <div class="actions">
+                        <a class="btn primary" href="https://github.com/apamungkas/apamungkas.github.io/tree/main/fabric_digital_twin">
+                            View Demo <span class="arrow">→</span>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="card soon">
+                    <span class="badge">Coming soon</span>
+                    <div class="icon">🤖</div>
+                    <h3>More demos in the works</h3>
+                    <p class="desc">
+                        New labs exploring Azure AI agents, real-time analytics, and edge
+                        intelligence are being cooked up. Check back soon — or reach out if
+                        there's something you'd like to see.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Azure AI</span>
+                        <span class="tag">Agents</span>
+                        <span class="tag">Edge</span>
+                        <span class="tag">Analytics</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <section class="band">
+        <div class="wrap">
+            <h2>How the demos come together</h2>
+            <p class="sub">These labs connect devices and factory assets to the cloud — streaming telemetry, modeling operations, surfacing real-time insight, and triggering action.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="n">1</div>
+                    <h4>Capture</h4>
+                    <p>Connected devices and factory machines produce telemetry about the physical world.</p>
+                </div>
+                <div class="step">
+                    <div class="n">2</div>
+                    <h4>Stream</h4>
+                    <p>Eventstream, Azure Functions, and IoT Hub route events into Microsoft Fabric.</p>
+                </div>
+                <div class="step">
+                    <div class="n">3</div>
+                    <h4>Analyze</h4>
+                    <p>Eventhouse, digital twin models, and real-time dashboards turn telemetry into operational insight.</p>
+                </div>
+                <div class="step">
+                    <div class="n">4</div>
+                    <h4>Act</h4>
+                    <p>Fabric Activator and connected workflows surface alerts and help teams respond.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="band" style="background: var(--bg);">
+        <div class="wrap">
+            <h2>Built with</h2>
+            <p class="sub">The technologies powering the labs across this portal.</p>
+            <div class="chips">
+                <span class="chip">Microsoft Fabric</span>
+                <span class="chip">Azure AI Foundry</span>
+                <span class="chip">Azure Functions</span>
+                <span class="chip">Azure Event Hub</span>
+                <span class="chip">Eventstream</span>
+                <span class="chip">Eventhouse (KQL)</span>
+                <span class="chip">Real-Time Dashboard</span>
+                <span class="chip">Fabric Activator</span>
+                <span class="chip">Fabric IQ Ontology</span>
+                <span class="chip">Azure IoT Hub</span>
+                <span class="chip">IoT Hub Direct Method</span>
+                <span class="chip">Power Automate</span>
+                <span class="chip">M5Stack</span>
+                <span class="chip">Arduino</span>
+                <span class="chip">Telegram Bot API</span>
+                <span class="chip">Python</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="wrap">
+            <span>© <span id="year"></span> Angger's Lab</span>
+            <a href="https://github.com/apamungkas/apamungkas.github.io">github.com/apamungkas</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

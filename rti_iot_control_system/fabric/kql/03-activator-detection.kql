@@ -1,0 +1,16 @@
+// =============================================================================
+// 03-activator-detection.kql  —  Query dasar untuk Data Activator (Bagian D)
+// -----------------------------------------------------------------------------
+// Dipakai sebagai sumber trigger di Activator: mendeteksi kondisi kritis
+// per device dalam jendela waktu berjalan. Ketika baris muncul, Activator
+// dapat memicu aksi (mis. memanggil Azure Function -> Direct Method).
+// =============================================================================
+
+// Kondisi overheat: suhu >= 40C selama 2 pembacaan berturut dalam 30 detik.
+telemetry
+| extend enqueuedTime = ingestion_time()
+| where enqueuedTime > ago(1m)
+| summarize avgTemp = avg(temperature), samples = count()
+    by deviceId, bin(enqueuedTime, 30s)
+| where avgTemp >= 40.0 and samples >= 2
+| project deviceId, window = enqueuedTime, avgTemp, alert = "OVERHEAT"

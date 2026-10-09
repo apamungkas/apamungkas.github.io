@@ -1,0 +1,23 @@
+# Kredensial firmware — jangan commit key asli
+firmware/m5stack-fire/config.h
+
+# Build artifacts Arduino / PlatformIO
+build/
+.pio/
+*.bin
+*.elf
+
+# Azure / tooling
+.azure/
+*.env
+
+# Azure Functions — jangan commit secrets & dependencies
+functions/**/local.settings.json
+functions/**/node_modules/
+functions/**/.func/
+bin/
+obj/
+
+# OS
+.DS_Store
+Thumbs.db

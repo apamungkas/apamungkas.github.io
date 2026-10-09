@@ -1,0 +1,14 @@
+rule LineStoppage
+	statement: When a conveyor on a production line has OperatingStatus Fault, the other machines on that line become Blocked and the line stops producing.
+	lineageTag: c0c05851-e703-4699-8a56-f8e76d59a71d
+
+	ruleReferencedEntity Machine
+		propertyScope: specific
+
+		ruleReferencedProperty OperatingStatus
+
+		ruleReferencedProperty MachineType
+
+	ruleReferencedEntity ProductionLine
+
+	ruleReferencedRelationship 'Machine On Line'

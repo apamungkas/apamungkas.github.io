@@ -1,0 +1,111 @@
+/// A manufacturing plant of PT Nusantara Manufaktur in Indonesia.
+entity Site
+	lineageTag: a1d1bc30-c16d-47c1-948b-ca32e6ef9835
+	backingTable: dim_site
+	keyProperty: SiteId
+	synonym plant
+	synonym factory
+	synonym pabrik
+
+	/// Unique plant identifier.
+	property SiteId
+		dataType: string
+		lineageTag: 2aa52a92-ccf9-4ea4-9865-b9c53507113c
+
+		backingConfiguration
+			valueColumn: dim_site.SiteId
+
+	/// Plant name.
+	property SiteName
+		dataType: string
+		lineageTag: b340be49-0ce8-48e7-ae10-63631424524a
+
+		backingConfiguration
+			valueColumn: dim_site.SiteName
+
+	/// Industrial estate where the plant is located.
+	property Area
+		dataType: string
+		lineageTag: 32ecfcb3-3ac5-43a5-ad70-11aa66962461
+
+		backingConfiguration
+			valueColumn: dim_site.Area
+
+	/// City or regency.
+	property City
+		dataType: string
+		lineageTag: fb600ec2-c010-4c6d-b7a1-d18030ccc0fd
+
+		backingConfiguration
+			valueColumn: dim_site.City
+
+	/// Province.
+	property Province
+		dataType: string
+		lineageTag: 91ab7bdc-759c-4830-a98a-6e8a8c1fd2eb
+
+		backingConfiguration
+			valueColumn: dim_site.Province
+
+	/// Country.
+	property Country
+		dataType: string
+		lineageTag: 9c397b1f-7faa-46de-ab11-1c6adfc370eb
+
+		backingConfiguration
+			valueColumn: dim_site.Country
+
+	/// Plant latitude.
+	property Latitude
+		dataType: double
+		lineageTag: 49713dd0-78e1-427a-8460-6a3c0f492745
+
+		backingConfiguration
+			valueColumn: dim_site.Latitude
+
+	/// Plant longitude.
+	property Longitude
+		dataType: double
+		lineageTag: b15225ca-5556-40d0-a17b-6ad1291774f5
+
+		backingConfiguration
+			valueColumn: dim_site.Longitude
+
+	/// IANA time zone of the plant (WIB).
+	property Timezone
+		dataType: string
+		lineageTag: e2ba2b6f-b7b8-4eb6-872b-2347f01863cd
+
+		backingConfiguration
+			valueColumn: dim_site.Timezone
+
+	/// Plant manager.
+	property PlantManager
+		dataType: string
+		lineageTag: 670bb83f-f09d-4597-bf17-71849747e79e
+
+		backingConfiguration
+			valueColumn: dim_site.PlantManager
+
+	/// Number of employees.
+	property Employees
+		dataType: int64
+		lineageTag: db815a67-0a66-42db-a8ac-af03d663ecd7
+
+		backingConfiguration
+			valueColumn: dim_site.Employees
+
+	/// Year the plant opened.
+	property OpenedYear
+		dataType: int64
+		lineageTag: 9431bef8-1c8b-4112-bd10-11456bb89365
+
+		backingConfiguration
+			valueColumn: dim_site.OpenedYear
+
+	/// Live operations dashboard (Real-Time Dashboard rtd_dt_factory).
+	resourceLink
+		item
+			workspaceId: <WORKSPACE_ID>
+			itemId: <DASHBOARD_ID>
+

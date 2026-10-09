@@ -1,0 +1,55 @@
+.set-or-append MachineTelemetry with (tags='["seed:history"]') <|
+let startT = bin(now(), 1m) - 7d;
+let endT = bin(now(), 1m);
+let wearStart = datetime(2026-10-05T15:00:00Z);
+let overheatStart = datetime(2026-10-08T09:00:00Z);
+let faultStart = datetime(2026-10-07T07:00:00Z);
+let faultEnd = datetime(2026-10-07T07:45:00Z);
+let M = datatable(MachineId: string, SiteId: string, LineId: string, MachineType: string, BaseTempC: real, TempLoadGainC: real, BaseVibMmS: real, BasePressureBar: real, RatedPowerKw: real, NominalRpm: real, UnitsPerMin: real, RejectRate: real)[
+"M-CKR-L1-01", "PLT-CKR", "LN-CKR-01", "InjectionMolder", 70.0, 8.0, 2.0, 140.0, 45.0, 1450.0, 10.0, 0.012,
+"M-CKR-L1-02", "PLT-CKR", "LN-CKR-01", "InjectionMolder", 70.0, 8.0, 2.0, 140.0, 45.0, 1450.0, 10.0, 0.012,
+"M-CKR-L1-03", "PLT-CKR", "LN-CKR-01", "Chiller", 46.0, 5.0, 1.4, 12.0, 30.0, 2900.0, 0.0, 0.0,
+"M-CKR-L1-04", "PLT-CKR", "LN-CKR-01", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0,
+"M-CKR-L2-01", "PLT-CKR", "LN-CKR-02", "RobotArm", 42.0, 6.0, 1.1, 6.0, 7.5, 3000.0, 6.0, 0.006,
+"M-CKR-L2-02", "PLT-CKR", "LN-CKR-02", "RobotArm", 42.0, 6.0, 1.1, 6.0, 7.5, 3000.0, 6.0, 0.006,
+"M-CKR-L2-03", "PLT-CKR", "LN-CKR-02", "Conveyor", 38.0, 5.0, 1.5, 5.5, 5.5, 1450.0, 0.0, 0.0,
+"M-CKR-L2-04", "PLT-CKR", "LN-CKR-02", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0,
+"M-KRW-L1-01", "PLT-KRW", "LN-KRW-01", "CNCMill", 55.0, 7.0, 1.7, 6.5, 22.0, 8000.0, 2.0, 0.01,
+"M-KRW-L1-02", "PLT-KRW", "LN-KRW-01", "CNCMill", 55.0, 7.0, 1.7, 6.5, 22.0, 8000.0, 2.0, 0.01,
+"M-KRW-L1-03", "PLT-KRW", "LN-KRW-01", "Conveyor", 38.0, 5.0, 1.5, 5.5, 5.5, 1450.0, 0.0, 0.0,
+"M-KRW-L1-04", "PLT-KRW", "LN-KRW-01", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0,
+"M-KRW-L2-01", "PLT-KRW", "LN-KRW-02", "Packer", 40.0, 5.0, 1.8, 6.0, 11.0, 1450.0, 20.0, 0.004,
+"M-KRW-L2-02", "PLT-KRW", "LN-KRW-02", "Packer", 40.0, 5.0, 1.8, 6.0, 11.0, 1450.0, 20.0, 0.004,
+"M-KRW-L2-03", "PLT-KRW", "LN-KRW-02", "Conveyor", 38.0, 5.0, 1.5, 5.5, 5.5, 1450.0, 0.0, 0.0,
+"M-KRW-L2-04", "PLT-KRW", "LN-KRW-02", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0,
+"M-SBY-L1-01", "PLT-SBY", "LN-SBY-01", "InjectionMolder", 70.0, 8.0, 2.0, 140.0, 45.0, 1450.0, 10.0, 0.012,
+"M-SBY-L1-02", "PLT-SBY", "LN-SBY-01", "InjectionMolder", 70.0, 8.0, 2.0, 140.0, 45.0, 1450.0, 10.0, 0.012,
+"M-SBY-L1-03", "PLT-SBY", "LN-SBY-01", "Chiller", 46.0, 5.0, 1.4, 12.0, 30.0, 2900.0, 0.0, 0.0,
+"M-SBY-L1-04", "PLT-SBY", "LN-SBY-01", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0,
+"M-SBY-L2-01", "PLT-SBY", "LN-SBY-02", "RobotArm", 42.0, 6.0, 1.1, 6.0, 7.5, 3000.0, 6.0, 0.006,
+"M-SBY-L2-02", "PLT-SBY", "LN-SBY-02", "RobotArm", 42.0, 6.0, 1.1, 6.0, 7.5, 3000.0, 6.0, 0.006,
+"M-SBY-L2-03", "PLT-SBY", "LN-SBY-02", "Conveyor", 38.0, 5.0, 1.5, 5.5, 5.5, 1450.0, 0.0, 0.0,
+"M-SBY-L2-04", "PLT-SBY", "LN-SBY-02", "AirCompressor", 74.0, 7.0, 2.3, 7.5, 55.0, 2950.0, 0.0, 0.0
+];
+range Timestamp from startT to endT - 1m step 1m
+| extend _k = 1
+| join kind=inner (M | extend _k = 1) on _k
+| project-away _k, _k1
+| extend LocalHour = hourofday(Timestamp + 7h), IsSunday = dayofweek(Timestamp + 7h) == 0d
+| extend Load = iff(LocalHour >= 6 and LocalHour < 22, 0.88, 0.64) * iff(IsSunday, 0.6, 1.0) + (rand() - 0.5) * 0.06
+| extend Status = iff(rand() < 0.004, "Idle", "Running")
+| extend Wear = iff(MachineId == "M-CKR-L2-04" and Timestamp > wearStart, min_of(1.0, todouble((Timestamp - wearStart) / 1m) / (3 * 1440.0)), 0.0)
+| extend Overheat = iff(MachineId == "M-SBY-L1-01" and Timestamp >= overheatStart and datetime_part("minute", Timestamp) between (8 .. 24), 1.0, 0.0)
+| extend InFault = Timestamp >= faultStart and Timestamp < faultEnd
+| extend Status = case(InFault and MachineId == "M-KRW-L2-03", "Fault", InFault and MachineId in ("M-KRW-L2-01", "M-KRW-L2-02"), "Blocked", Status)
+| extend Active = iff(Status == "Running", 1.0, 0.0)
+| extend TemperatureC = BaseTempC + TempLoadGainC * Load * Active + 6.0 * Wear + 27.0 * Overheat + (rand() - 0.5) * 2.0 - iff(Active == 0.0, 6.0, 0.0)
+| extend VibrationMmS = iff(Active == 1.0, BaseVibMmS * (0.8 + 0.4 * Load) + 6.0 * pow(Wear, 2.0) + 0.6 * Overheat + (rand() - 0.5) * 0.35, 0.05 + rand() * 0.1)
+| extend PressureBar = iff(Active == 1.0, BasePressureBar * (0.97 + 0.06 * rand()) - iff(MachineType == "AirCompressor", 0.4 * Wear, 0.0), BasePressureBar * 0.1)
+| extend PowerKw = iff(Active == 1.0, RatedPowerKw * (0.35 + 0.55 * Load) * (1.0 + 0.08 * Wear) + (rand() - 0.5) * RatedPowerKw * 0.03, RatedPowerKw * 0.04)
+| extend Rpm = iff(Active == 1.0, NominalRpm * (0.96 + 0.06 * Load) + (rand() - 0.5) * NominalRpm * 0.01, 0.0)
+| extend Units = UnitsPerMin * Active * (0.75 + 0.3 * Load) * (1.0 - 0.15 * Overheat) + iff(UnitsPerMin > 0.0, (rand() - 0.5) * 2.0, 0.0)
+| extend UnitsProduced = toint(round(max_of(Units, 0.0)))
+| extend UnitsRejected = toint(round(UnitsProduced * (RejectRate + 0.11 * Overheat) * (0.5 + rand())))
+| project Timestamp, SiteId, LineId, MachineId, MachineType, Status, TemperatureC = round(TemperatureC, 2), VibrationMmS = round(VibrationMmS, 3),
+          PressureBar = round(PressureBar, 2), PowerKw = round(PowerKw, 2), Rpm = round(Rpm, 1), UnitsProduced, UnitsRejected

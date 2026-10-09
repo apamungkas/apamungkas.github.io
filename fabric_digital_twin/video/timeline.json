@@ -1,0 +1,103 @@
+{
+  "fps": 30,
+  "subs": [
+    {
+      "start": 0,
+      "end": 4641,
+      "text": "Getaran kompresor ini naik pelan-pelan selama 3 hari…"
+    },
+    {
+      "start": 4641,
+      "end": 15314,
+      "text": "…dan digital twin di Microsoft Fabric menangkapnya sebelum mesin rusak."
+    },
+    {
+      "start": 15314,
+      "end": 20196,
+      "text": "Skenario demo: 3 pabrik, 6 lini produksi, 24 mesin (data simulasi)."
+    },
+    {
+      "start": 20196,
+      "end": 27749,
+      "text": "6 jam terakhir: 1 mesin kritis, yaitu kompresor di lini perakitan Cikarang."
+    },
+    {
+      "start": 27749,
+      "end": 32879,
+      "text": "Lonjakan suhu mesin injeksi dan OEE tiap lini juga terpantau real-time."
+    },
+    {
+      "start": 32879,
+      "end": 38061,
+      "text": "Datanya mengalir lewat Eventstream: telemetri 24 mesin, setiap 10 detik…"
+    },
+    {
+      "start": 38061,
+      "end": 43008,
+      "text": "…langsung masuk ke Eventhouse, siap dianalisis dalam hitungan detik."
+    },
+    {
+      "start": 43008,
+      "end": 46995,
+      "text": "Ontology di Fabric IQ menjadi model digital twin-nya:"
+    },
+    {
+      "start": 46995,
+      "end": 57552,
+      "text": "Pabrik → Lini → Mesin → Work Order, lengkap dengan relasinya."
+    },
+    {
+      "start": 57552,
+      "end": 63171,
+      "text": "Tiap properti mesin terikat langsung ke tabel di Lakehouse, tanpa menyalin data."
+    },
+    {
+      "start": 63171,
+      "end": 68293,
+      "text": "Activator memantau aturan bisnis: getaran > 7,1 mm/s atau suhu > 95 °C…"
+    },
+    {
+      "start": 68293,
+      "end": 71604,
+      "text": "…lalu otomatis mengirim alert lewat email."
+    }
+  ],
+  "chapters": [
+    {
+      "start": 0,
+      "name": "Real-Time Dashboard"
+    },
+    {
+      "start": 32879,
+      "name": "Eventstream → Eventhouse"
+    },
+    {
+      "start": 43007,
+      "name": "Ontology · Fabric IQ"
+    },
+    {
+      "start": 63171,
+      "name": "Activator"
+    },
+    {
+      "start": 71601,
+      "name": ""
+    }
+  ],
+  "cuts": [
+    0,
+    15314,
+    32879,
+    43008,
+    57552,
+    63171
+  ],
+  "beats": [
+    {
+      "name": "hook",
+      "start": 0
+    }
+  ],
+  "duration": 76813,
+  "ok": true
+}

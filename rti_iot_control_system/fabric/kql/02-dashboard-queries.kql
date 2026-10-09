@@ -1,0 +1,94 @@
+// =============================================================================
+// 02-dashboard-queries.kql  —  Query untuk Real-Time Dashboard
+// -----------------------------------------------------------------------------
+// Setiap blok di bawah = satu tile di Real-Time Dashboard.
+// Copy query ke tile baru, lalu pilih visual yang disarankan pada komentar.
+// Ganti parameter waktu dengan _startTime.._endTime bila memakai parameter
+// dashboard bawaan Fabric.
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// TILE 1 — KPI: pembacaan terakhir per device  (Visual: Multi Stat)
+//   Multi Stat = 1 kartu per BARIS. narrow() mengubah kolom metrik menjadi baris
+//   sehingga tiap metrik tampil sebagai kartu terpisah.
+//   Di Visual formatting: Label = Column, Value = Value.
+// -----------------------------------------------------------------------------
+telemetry
+| extend enqueuedTime = ingestion_time()
+| summarize arg_max(enqueuedTime, *) by deviceId
+| project Temperature = temperature, Humidity = humidity, Pressure = pressure,
+          Vibration = vibration, Noise = todouble(noiseLevel)
+| evaluate narrow()
+| project Column, Value
+
+// -----------------------------------------------------------------------------
+// TILE 2 — Tren suhu real-time  (Visual: Time chart / Line)
+//   Filter pakai UTC (ago), tampilan dikonversi ke Asia/Jakarta (UTC+7).
+// -----------------------------------------------------------------------------
+telemetry
+| extend t = ingestion_time()
+| where t > ago(15m)
+| extend enqueuedTime = datetime_utc_to_local(t, "Asia/Jakarta")
+| summarize avgTemp = avg(temperature) by bin(enqueuedTime, 5s), deviceId
+| render timechart
+
+// -----------------------------------------------------------------------------
+// TILE 3 — Kelembapan & tekanan  (Visual: Time chart, dua seri)
+// -----------------------------------------------------------------------------
+telemetry
+| extend t = ingestion_time()
+| where t > ago(15m)
+| extend enqueuedTime = datetime_utc_to_local(t, "Asia/Jakarta")
+| summarize Humidity = avg(humidity), Pressure = avg(pressure)
+    by bin(enqueuedTime, 10s)
+| render timechart
+
+// -----------------------------------------------------------------------------
+// TILE 4 — Getaran (deteksi lonjakan)  (Visual: Time chart / Anomaly)
+// -----------------------------------------------------------------------------
+telemetry
+| extend t = ingestion_time()
+| where t > ago(15m)
+| extend enqueuedTime = datetime_utc_to_local(t, "Asia/Jakarta")
+| summarize maxVib = max(vibration) by bin(enqueuedTime, 5s)
+| render timechart
+
+// -----------------------------------------------------------------------------
+// TILE 5 — Distribusi status  (Visual: Pie / Column)
+// -----------------------------------------------------------------------------
+telemetry
+| extend enqueuedTime = ingestion_time()
+| where enqueuedTime > ago(1h)
+| summarize count() by status
+| render piechart
+
+// -----------------------------------------------------------------------------
+// TILE 6 — Gauge suhu terkini  (Visual: Stat, conditional formatting)
+//   Hijau < 35, Kuning 35-40, Merah > 40
+// -----------------------------------------------------------------------------
+telemetry
+| extend enqueuedTime = ingestion_time()
+| summarize arg_max(enqueuedTime, temperature) by deviceId
+| project deviceId, temperature
+
+// -----------------------------------------------------------------------------
+// TILE 7 — Log alert (suhu kritis)  (Visual: Table)
+// -----------------------------------------------------------------------------
+telemetry
+| extend t = ingestion_time()
+| where t > ago(1h) and temperature >= 40.0
+| extend enqueuedTime = datetime_utc_to_local(t, "Asia/Jakarta")
+| project enqueuedTime, deviceId, temperature, status
+| order by enqueuedTime desc
+
+// -----------------------------------------------------------------------------
+// TILE 8 — Deteksi anomali suhu (built-in ML)  (Visual: Anomaly chart)
+// -----------------------------------------------------------------------------
+telemetry
+| extend t = ingestion_time()
+| where t > ago(30m)
+| extend enqueuedTime = datetime_utc_to_local(t, "Asia/Jakarta")
+| make-series temp = avg(temperature) default=real(null)
+    on enqueuedTime step 10s by deviceId
+| extend (anomalies, score, baseline) = series_decompose_anomalies(temp, 1.5)
+| render anomalychart with(anomalycolumns=anomalies)

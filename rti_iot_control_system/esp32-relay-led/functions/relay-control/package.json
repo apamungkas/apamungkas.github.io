@@ -1,0 +1,13 @@
+{
+  "name": "relay-control-function",
+  "version": "1.0.0",
+  "description": "Kontrol LED via relay ESP32 -> Azure IoT Hub Direct Method (setRelay/toggleRelay)",
+  "main": "src/functions/*.js",
+  "scripts": {
+    "start": "func start"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.5.0",
+    "azure-iothub": "^1.16.0"
+  }
+}

@@ -1,0 +1,48 @@
+/// A production line inside a plant.
+entity ProductionLine
+	lineageTag: 2df7cecd-db73-47cc-90f8-79270fd7bc53
+	backingTable: dim_production_line
+	keyProperty: LineId
+	synonym line
+	synonym lini
+
+	/// Unique production line identifier.
+	property LineId
+		dataType: string
+		lineageTag: 55e2ce24-03bf-4d69-8c2c-155682e760cb
+
+		backingConfiguration
+			valueColumn: dim_production_line.LineId
+
+	/// Plant that owns the line.
+	property LineSiteId
+		dataType: string
+		lineageTag: 841973d5-35eb-440b-8c02-c9181cb8e352
+
+		backingConfiguration
+			valueColumn: dim_production_line.SiteId
+
+	/// Production line name.
+	property LineName
+		dataType: string
+		lineageTag: 9a7f80a8-164f-4996-b92b-e97621c05774
+
+		backingConfiguration
+			valueColumn: dim_production_line.LineName
+
+	/// Line type: InjectionMolding, Assembly, Machining or Packaging.
+	property LineType
+		dataType: string
+		lineageTag: d26eb56c-08e0-4480-9804-a609425a1e87
+
+		backingConfiguration
+			valueColumn: dim_production_line.LineType
+
+	/// Planned output of the line in units per hour.
+	property TargetUnitsPerHour
+		dataType: int64
+		lineageTag: caa3567b-0ae9-4fdd-a1cd-e6777ba92eec
+
+		backingConfiguration
+			valueColumn: dim_production_line.TargetUnitsPerHour
+

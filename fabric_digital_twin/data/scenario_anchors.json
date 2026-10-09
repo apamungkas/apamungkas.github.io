@@ -1,0 +1,16 @@
+{
+  "wearMachine": "M-CKR-L2-04",
+  "wearStart": "2026-10-05T15:00:00Z",
+  "wearDays": 3,
+  "overheatMachine": "M-SBY-L1-01",
+  "overheatStart": "2026-10-08T09:00:00Z",
+  "overheatMinuteFrom": 8,
+  "overheatMinuteTo": 24,
+  "faultMachine": "M-KRW-L2-03",
+  "blockedMachines": [
+    "M-KRW-L2-01",
+    "M-KRW-L2-02"
+  ],
+  "faultStart": "2026-10-07T07:00:00Z",
+  "faultEnd": "2026-10-07T07:45:00Z"
+}

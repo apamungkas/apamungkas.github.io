@@ -1,0 +1,16 @@
+rule VibrationLimit
+	statement: A machine whose vibration exceeds its VibMaxMmS limit is in critical condition and needs a corrective work order; rising vibration on an air compressor usually indicates bearing wear.
+	lineageTag: 23438648-a44f-4ba3-a881-5cb508f0e685
+
+	ruleReferencedEntity Machine
+		propertyScope: specific
+
+		ruleReferencedProperty VibrationMmS
+
+		ruleReferencedProperty VibMaxMmS
+
+		ruleReferencedProperty MachineType
+
+	ruleReferencedEntity WorkOrder
+
+	ruleReferencedRelationship 'Work Order For Machine'

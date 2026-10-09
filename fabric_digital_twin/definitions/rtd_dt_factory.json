@@ -1,0 +1,900 @@
+{
+  "$schema": "https://dataexplorer.azure.com/static/d/schema/52/dashboard.json",
+  "autoRefresh": {
+    "enabled": true,
+    "defaultInterval": "1m",
+    "minInterval": "30s"
+  },
+  "baseQueries": [],
+  "tiles": [
+    {
+      "id": "b225505c-b30f-5978-a237-863e7f6f258c",
+      "title": "Plant map - Site health",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "c3e0c907-a13b-5115-aa6b-7174d95a146b"
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 8,
+        "height": 8
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "map",
+      "visualOptions": {
+        "map__latitudeColumn": "Latitude",
+        "map__longitudeColumn": "Longitude",
+        "map__bubbleFormat": "bubble",
+        "map__minBubbleSizeColumn": "Machines",
+        "seriesColumns": [
+          "SiteHealth"
+        ],
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 10
+        }
+      }
+    },
+    {
+      "id": "2c2d9d9b-690d-536d-b3c3-dc6e7a0a06fe",
+      "title": "Machine health and production",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "eff5d71e-93e9-5584-a107-eec1ba7a75d2"
+      },
+      "layout": {
+        "x": 8,
+        "y": 0,
+        "width": 16,
+        "height": 8
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "multistat",
+      "visualOptions": {
+        "multiStat__displayOrientation": "horizontal",
+        "multiStat__labelColumn": "Metric",
+        "multiStat__valueColumn": "Value",
+        "multiStat__textSize": "large",
+        "hideLegend": true,
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 10
+        },
+        "multiStat__slot": {
+          "width": 4,
+          "height": 1
+        }
+      }
+    },
+    {
+      "id": "b488b258-36f7-579a-9ae0-c785e12194a2",
+      "title": "Machines needing attention",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "183a99af-6e3b-5fa1-8565-fe48fc188b2c"
+      },
+      "layout": {
+        "x": 0,
+        "y": 8,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "table",
+      "visualOptions": {
+        "table__enableRenderLinks": true,
+        "table__renderLinks": [],
+        "colorRules": [
+          {
+            "id": "aab4829e-6f4a-58fe-8316-b85b65566439",
+            "ruleName": "Critical rows",
+            "applyTo": "rows",
+            "visualType": "table",
+            "ruleType": "colorByCondition",
+            "chainingOperator": "and",
+            "colorStyle": "light",
+            "applyToColumn": null,
+            "conditions": [
+              {
+                "column": "HealthState",
+                "operator": "==",
+                "values": [
+                  "Critical"
+                ]
+              }
+            ],
+            "color": "red",
+            "tag": "Critical",
+            "icon": "critical",
+            "hideText": false
+          },
+          {
+            "id": "c9e2cd37-bc1f-55f2-a295-76194faabb31",
+            "ruleName": "Warning rows",
+            "applyTo": "rows",
+            "visualType": "table",
+            "ruleType": "colorByCondition",
+            "chainingOperator": "and",
+            "colorStyle": "light",
+            "applyToColumn": null,
+            "conditions": [
+              {
+                "column": "HealthState",
+                "operator": "==",
+                "values": [
+                  "Warning"
+                ]
+              }
+            ],
+            "color": "yellow",
+            "tag": "Warning",
+            "icon": "warning",
+            "hideText": false
+          },
+          {
+            "id": "2fe1d3c8-70d2-5b8c-9a32-bf9d2c5e2b21",
+            "ruleName": "Offline rows",
+            "applyTo": "rows",
+            "visualType": "table",
+            "ruleType": "colorByCondition",
+            "chainingOperator": "and",
+            "colorStyle": "light",
+            "applyToColumn": null,
+            "conditions": [
+              {
+                "column": "HealthState",
+                "operator": "==",
+                "values": [
+                  "Offline"
+                ]
+              }
+            ],
+            "color": "red",
+            "tag": "Offline",
+            "icon": "critical",
+            "hideText": false
+          }
+        ],
+        "colorRulesDisabled": false,
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "crossFilter": [],
+        "drillthrough": [],
+        "selectedDataOnLoad": {
+          "all": false,
+          "limit": 50
+        }
+      }
+    },
+    {
+      "id": "2f662d6f-5ee5-50dd-910e-5126e457e62a",
+      "title": "Air compressor vibration (mm/s)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "84c36cac-162a-5dad-8ff0-a4eeb7b742c2"
+      },
+      "layout": {
+        "x": 12,
+        "y": 8,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "AvgVibrationMmS"
+        ],
+        "yColumnTitle": "Vibration (mm/s)",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "Vibration (mm/s)",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": [
+              {
+                "id": "46da6e11-a2e9-5ba7-a207-91f7c560e50b",
+                "value": 7.1
+              }
+            ]
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "2ea153c4-82bc-5d5a-aaed-7964dba0f17f",
+      "title": "Injection molder temperature (°C)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "9ccecd64-1604-5443-a8c0-702630a1a615"
+      },
+      "layout": {
+        "x": 0,
+        "y": 15,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "AvgTemperatureC"
+        ],
+        "yColumnTitle": "Temperature (°C)",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "Temperature (°C)",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": [
+              {
+                "id": "5383ed6b-8185-5a01-97c5-61ad6f3ff3bf",
+                "value": 95.0
+              }
+            ]
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "6ba04d7d-25cd-5442-bf93-7c38324a87b0",
+      "title": "OEE by line (24h)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "ae07364c-0aef-5ca7-94c2-ba2bac12be93"
+      },
+      "layout": {
+        "x": 12,
+        "y": 15,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "column",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "LineId",
+        "xColumnTitle": "",
+        "yColumns": [
+          "OEE"
+        ],
+        "yColumnTitle": "OEE (%)",
+        "seriesColumns": [
+          "SiteId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": 90,
+        "yAxisMaximumValue": 100,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "OEE (%)",
+            "yAxisMinimumValue": 90,
+            "yAxisMaximumValue": 100,
+            "yAxisScale": "linear",
+            "horizontalLines": []
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "8787bbab-4512-5b54-a7bc-89206bec20f6",
+      "title": "Recent anomalies",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "ab059dfe-0cbf-5d5a-bc1d-98d220c5e63e"
+      },
+      "layout": {
+        "x": 0,
+        "y": 22,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "table",
+      "visualOptions": {
+        "table__enableRenderLinks": true,
+        "table__renderLinks": [],
+        "colorRules": [],
+        "colorRulesDisabled": true,
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "crossFilter": [],
+        "drillthrough": [],
+        "selectedDataOnLoad": {
+          "all": false,
+          "limit": 50
+        }
+      }
+    },
+    {
+      "id": "7de2c3b9-ffef-55b9-8575-68baa971cbe8",
+      "title": "Health score ranking (last hour)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "65266afe-c369-5a3c-8d05-392bb03e8a09"
+      },
+      "layout": {
+        "x": 12,
+        "y": 22,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "4620ed28-d5ff-59d6-9b35-fac712e5d172",
+      "visualType": "table",
+      "visualOptions": {
+        "table__enableRenderLinks": true,
+        "table__renderLinks": [],
+        "colorRules": [],
+        "colorRulesDisabled": true,
+        "crossFilterDisabled": false,
+        "drillthroughDisabled": false,
+        "crossFilter": [],
+        "drillthrough": [],
+        "selectedDataOnLoad": {
+          "all": false,
+          "limit": 50
+        }
+      }
+    },
+    {
+      "id": "266aa878-5b94-542a-89ab-085550e7fa84",
+      "title": "Selected machine health",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "0b515205-7dd6-5b7f-a468-30c50485c2ad"
+      },
+      "layout": {
+        "x": 0,
+        "y": 0,
+        "width": 9,
+        "height": 7
+      },
+      "pageId": "ba303681-3993-55a1-91ea-d10a210a8d72",
+      "visualType": "card",
+      "visualOptions": {
+        "multiStat__labelColumn": "Metric",
+        "multiStat__valueColumn": "Value",
+        "multiStat__textSize": "large"
+      }
+    },
+    {
+      "id": "9d8328ef-8076-5df6-a5d3-4f0fa962bfe2",
+      "title": "Machine temperature (°C)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "33cc33b0-cb9e-5c78-b89e-ba30b99d9f31"
+      },
+      "layout": {
+        "x": 9,
+        "y": 0,
+        "width": 15,
+        "height": 7
+      },
+      "pageId": "ba303681-3993-55a1-91ea-d10a210a8d72",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "TemperatureC"
+        ],
+        "yColumnTitle": "Temperature (°C)",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "Temperature (°C)",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": [
+              {
+                "id": "5383ed6b-8185-5a01-97c5-61ad6f3ff3bf",
+                "value": 95.0
+              }
+            ]
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "62773f5d-6288-5894-878c-e0fa3f6bde50",
+      "title": "Machine vibration (mm/s)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "98776a44-76b1-59a4-a137-d0838ae96945"
+      },
+      "layout": {
+        "x": 0,
+        "y": 7,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "ba303681-3993-55a1-91ea-d10a210a8d72",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "VibrationMmS"
+        ],
+        "yColumnTitle": "Vibration (mm/s)",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "Vibration (mm/s)",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": [
+              {
+                "id": "46da6e11-a2e9-5ba7-a207-91f7c560e50b",
+                "value": 7.1
+              }
+            ]
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "f697220f-b9f7-5d39-b7dc-963721756233",
+      "title": "Machine power (kW)",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "7d808b1b-f341-5d59-9ab4-0f2ffdf0f210"
+      },
+      "layout": {
+        "x": 12,
+        "y": 7,
+        "width": 12,
+        "height": 7
+      },
+      "pageId": "ba303681-3993-55a1-91ea-d10a210a8d72",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "PowerKw"
+        ],
+        "yColumnTitle": "Power (kW)",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "Power (kW)",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": []
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    },
+    {
+      "id": "5171484f-62c7-5a19-895c-b01811f0c4ab",
+      "title": "Machine RPM",
+      "queryRef": {
+        "kind": "query",
+        "queryId": "c2b89996-f369-51bd-8988-d4a1116f8417"
+      },
+      "layout": {
+        "x": 0,
+        "y": 14,
+        "width": 24,
+        "height": 7
+      },
+      "pageId": "ba303681-3993-55a1-91ea-d10a210a8d72",
+      "visualType": "timechart",
+      "visualOptions": {
+        "hideLegend": false,
+        "xColumn": "Timestamp",
+        "xColumnTitle": "",
+        "yColumns": [
+          "Rpm"
+        ],
+        "yColumnTitle": "RPM",
+        "seriesColumns": [
+          "MachineId"
+        ],
+        "yAxisRight": false,
+        "yAxisMinimumValue": null,
+        "yAxisMaximumValue": null,
+        "xAxisScale": "linear",
+        "yAxisScale": "linear",
+        "multipleYAxes": {
+          "base": {
+            "id": "-1",
+            "columns": [],
+            "label": "RPM",
+            "yAxisMinimumValue": null,
+            "yAxisMaximumValue": null,
+            "yAxisScale": "linear",
+            "horizontalLines": []
+          },
+          "additional": [],
+          "showMultiplePanels": false
+        },
+        "selectedDataOnLoad": {
+          "all": true,
+          "limit": 20
+        }
+      }
+    }
+  ],
+  "dataSources": [
+    {
+      "id": "b6918b0a-cc75-5f2d-855c-b40ebb261542",
+      "name": "eh_dt_factory",
+      "scopeId": "kusto-trident",
+      "kind": "kusto-trident",
+      "clusterUri": "https://<your-cluster>.kusto.fabric.microsoft.com",
+      "database": "<KQL_DATABASE_ID>",
+      "workspace": "<WORKSPACE_ID>"
+    }
+  ],
+  "pages": [
+    {
+      "name": "Plant Overview",
+      "id": "4620ed28-d5ff-59d6-9b35-fac712e5d172"
+    },
+    {
+      "name": "Machine Drilldown",
+      "id": "ba303681-3993-55a1-91ea-d10a210a8d72"
+    }
+  ],
+  "parameters": [
+    {
+      "kind": "duration",
+      "id": "b081f62a-7ad3-52f2-915c-a798104d8d45",
+      "displayName": "Time range",
+      "description": "Dashboard time range",
+      "beginVariableName": "_startTime",
+      "endVariableName": "_endTime",
+      "defaultValue": {
+        "kind": "dynamic",
+        "count": 6,
+        "unit": "hours"
+      },
+      "showOnPages": {
+        "kind": "all"
+      }
+    },
+    {
+      "kind": "string",
+      "id": "d8e14944-1078-599f-a6bd-b0ccdf088af0",
+      "displayName": "Site",
+      "description": "Plant site filter",
+      "variableName": "_sites",
+      "selectionType": "array",
+      "includeAllOption": true,
+      "allIsNull": false,
+      "defaultValue": {
+        "kind": "all"
+      },
+      "showOnPages": {
+        "kind": "selection",
+        "pageIds": [
+          "4620ed28-d5ff-59d6-9b35-fac712e5d172"
+        ]
+      },
+      "dataSource": {
+        "kind": "query",
+        "queryRef": {
+          "kind": "query",
+          "queryId": "71a6f6ce-9118-5770-939f-3c125daf268c"
+        },
+        "columns": {
+          "value": "SiteId",
+          "label": "SiteName"
+        }
+      }
+    },
+    {
+      "kind": "string",
+      "id": "ed93c742-ea2b-5c17-b807-93e02f1a0709",
+      "displayName": "Machine",
+      "description": "Machine drilldown selector",
+      "variableName": "_machine",
+      "selectionType": "scalar",
+      "includeAllOption": false,
+      "defaultValue": {
+        "kind": "value",
+        "value": "M-CKR-L2-04"
+      },
+      "showOnPages": {
+        "kind": "selection",
+        "pageIds": [
+          "ba303681-3993-55a1-91ea-d10a210a8d72"
+        ]
+      },
+      "dataSource": {
+        "kind": "query",
+        "queryRef": {
+          "kind": "query",
+          "queryId": "af505af1-4fd8-53fc-93f3-87a4000ce94c"
+        },
+        "columns": {
+          "value": "MachineId",
+          "label": "MachineName"
+        }
+      }
+    }
+  ],
+  "queries": [
+    {
+      "id": "71a6f6ce-9118-5770-939f-3c125daf268c",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [],
+      "text": "DimSite\n| order by SiteName asc\n| project SiteId, SiteName\n"
+    },
+    {
+      "id": "af505af1-4fd8-53fc-93f3-87a4000ce94c",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [],
+      "text": "DimMachine\n| order by SiteId asc, LineId asc, MachineId asc\n| project MachineId, MachineName = strcat(MachineId, \" - \", MachineName)\n"
+    },
+    {
+      "id": "c3e0c907-a13b-5115-aa6b-7174d95a146b",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_sites"
+      ],
+      "text": "SiteStatus()\n| where SiteId in (_sites) or isempty(_sites)\n| project SiteName, City, Latitude, Longitude, Machines, Critical, Warning, Healthy, Offline, SiteHealth\n| order by SiteName asc\n"
+    },
+    {
+      "id": "eff5d71e-93e9-5584-a107-eec1ba7a75d2",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_sites"
+      ],
+      "text": "let current = materialize(MachineCurrentState() | where SiteId in (_sites) or isempty(_sites));\nlet counts = current\n    | summarize Critical=countif(HealthState == \"Critical\"),\n                Warning=countif(HealthState == \"Warning\"),\n                Healthy=countif(HealthState == \"Healthy\");\nlet units = toscalar(\n    MachineTelemetry\n    | where Timestamp between (_startTime .. _endTime)\n    | where SiteId in (_sites) or isempty(_sites)\n    | summarize UnitsProduced=sum(UnitsProduced)\n);\ncounts\n| project Metric=\"Critical machines\", Value=Critical\n| union (counts | project Metric=\"Warning machines\", Value=Warning)\n| union (counts | project Metric=\"Healthy machines\", Value=Healthy)\n| union (print Metric=\"Units produced\", Value=tolong(coalesce(units, 0)))\n"
+    },
+    {
+      "id": "183a99af-6e3b-5fa1-8565-fe48fc188b2c",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_sites"
+      ],
+      "text": "MachineCurrentState()\n| where SiteId in (_sites) or isempty(_sites)\n| where HealthState !in (\"Healthy\", \"Idle\")\n| project Timestamp, SiteName, LineName, MachineId, MachineName, MachineType, Criticality,\n          Status, HealthState, TemperatureC, TempMaxC, VibrationMmS, VibMaxMmS, MinutesSinceLastReading\n| order by case(HealthState == \"Critical\", 0, HealthState == \"Warning\", 1, HealthState == \"Offline\", 2, 3) asc,\n           Criticality asc, MachineId asc\n"
+    },
+    {
+      "id": "84c36cac-162a-5dad-8ff0-a4eeb7b742c2",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_sites"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where SiteId in (_sites) or isempty(_sites)\n| where MachineType == \"AirCompressor\"\n| summarize AvgVibrationMmS=avg(VibrationMmS) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    },
+    {
+      "id": "9ccecd64-1604-5443-a8c0-702630a1a615",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_sites"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where SiteId in (_sites) or isempty(_sites)\n| where MachineType == \"InjectionMolder\"\n| summarize AvgTemperatureC=avg(TemperatureC), Rejects=sum(UnitsRejected) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    },
+    {
+      "id": "ae07364c-0aef-5ca7-94c2-ba2bac12be93",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_sites"
+      ],
+      "text": "LineOEE(24h)\n| where SiteId in (_sites) or isempty(_sites)\n| project LineId, LineName, SiteId, LineType,\n          OEE=round(OEE * 100.0, 1),\n          Availability=round(Availability * 100.0, 1),\n          Performance=round(Performance * 100.0, 1),\n          Quality=round(Quality * 100.0, 1),\n          Produced, Rejected, LineDownMinutes\n| order by OEE asc\n"
+    },
+    {
+      "id": "ab059dfe-0cbf-5d5a-bc1d-98d220c5e63e",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_sites"
+      ],
+      "text": "union\n    (MachineAnomalies(1d, \"VibrationMmS\") | where Direction == \"Spike\"),\n    (MachineAnomalies(1d, \"TemperatureC\") | where Direction == \"Spike\")\n| where SiteId in (_sites) or isempty(_sites)\n| project Timestamp, SiteId, LineId, MachineId, MachineName, MachineType, Metric,\n          Value=round(Value, 3), Baseline=round(Baseline, 3), Score=round(Score, 2), Direction\n| order by Timestamp desc\n| take 50\n"
+    },
+    {
+      "id": "65266afe-c369-5a3c-8d05-392bb03e8a09",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_sites"
+      ],
+      "text": "MachineHealthScore(1h)\n| where SiteId in (_sites) or isempty(_sites)\n| project MachineId, MachineName, MachineType, SiteId, LineId, Criticality,\n          HealthScore=round(HealthScore, 1), MaxTemp=round(MaxTemp, 1), TempMaxC,\n          MaxVib=round(MaxVib, 3), VibMaxMmS, FaultShare=round(FaultShare, 3), Readings\n| order by HealthScore asc, Criticality asc\n"
+    },
+    {
+      "id": "0b515205-7dd6-5b7f-a468-30c50485c2ad",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_machine"
+      ],
+      "text": "MachineCurrentState()\n| where MachineId == _machine\n| project Metric=\"Current health\", Value=HealthState, Status, Timestamp, TemperatureC, VibrationMmS\n"
+    },
+    {
+      "id": "33cc33b0-cb9e-5c78-b89e-ba30b99d9f31",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_machine"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where MachineId == _machine\n| summarize TemperatureC=avg(TemperatureC) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    },
+    {
+      "id": "98776a44-76b1-59a4-a137-d0838ae96945",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_machine"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where MachineId == _machine\n| summarize VibrationMmS=avg(VibrationMmS) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    },
+    {
+      "id": "7d808b1b-f341-5d59-9ab4-0f2ffdf0f210",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_machine"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where MachineId == _machine\n| summarize PowerKw=avg(PowerKw) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    },
+    {
+      "id": "c2b89996-f369-51bd-8988-d4a1116f8417",
+      "dataSource": {
+        "kind": "inline",
+        "dataSourceId": "b6918b0a-cc75-5f2d-855c-b40ebb261542"
+      },
+      "usedVariables": [
+        "_startTime",
+        "_endTime",
+        "_machine"
+      ],
+      "text": "let _grain = case(_endTime - _startTime <= 12h, 1m, _endTime - _startTime <= 2d, 5m, 30m);\nMachineTelemetry\n| where Timestamp between (_startTime .. _endTime)\n| where MachineId == _machine\n| summarize Rpm=avg(Rpm) by Timestamp=bin(Timestamp, _grain), MachineId\n| order by Timestamp asc\n"
+    }
+  ],
+  "schema_version": "52",
+  "title": "rtd_dt_factory"
+}

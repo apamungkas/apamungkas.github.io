@@ -1,0 +1,12 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "IOTHUB_CONNECTION_STRING": "HostName=YOUR_IOT_HUB.azure-devices.net;SharedAccessKeyName=service;SharedAccessKey=YOUR_SERVICE_KEY",
+    "DEFAULT_DEVICE_ID": "esp32-relay-01"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}

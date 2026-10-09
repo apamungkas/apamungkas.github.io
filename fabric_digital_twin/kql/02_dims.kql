@@ -1,0 +1,41 @@
+.set-or-replace DimSite <| datatable(SiteId: string, SiteName: string, Area: string, City: string, Province: string, Country: string, Latitude: real, Longitude: real, Timezone: string, PlantManager: string, Employees: int, OpenedYear: int)[
+"PLT-CKR", "Cikarang Plant", "Jababeka Industrial Estate", "Bekasi Regency", "West Java", "Indonesia", -6.295, 107.153, "Asia/Jakarta", "Hendra Gunawan", 820, 2012,
+"PLT-KRW", "Karawang Plant", "KIIC Industrial Estate", "Karawang", "West Java", "Indonesia", -6.357, 107.293, "Asia/Jakarta", "Dewi Lestari", 640, 2016,
+"PLT-SBY", "Surabaya Plant", "SIER Rungkut Industrial Estate", "Surabaya", "East Java", "Indonesia", -7.334, 112.759, "Asia/Jakarta", "Rizky Hidayat", 710, 2014
+]
+
+.set-or-replace DimLine <| datatable(LineId: string, SiteId: string, LineName: string, LineType: string, TargetUnitsPerHour: int)[
+"LN-CKR-01", "PLT-CKR", "Cikarang Injection Molding Line 1", "InjectionMolding", 1200,
+"LN-CKR-02", "PLT-CKR", "Cikarang Assembly Line 2", "Assembly", 720,
+"LN-KRW-01", "PLT-KRW", "Karawang CNC Machining Line 1", "Machining", 240,
+"LN-KRW-02", "PLT-KRW", "Karawang Packaging Line 2", "Packaging", 2400,
+"LN-SBY-01", "PLT-SBY", "Surabaya Injection Molding Line 1", "InjectionMolding", 1200,
+"LN-SBY-02", "PLT-SBY", "Surabaya Assembly Line 2", "Assembly", 720
+]
+
+.set-or-replace DimMachine <| datatable(MachineId: string, MachineName: string, MachineType: string, LineId: string, SiteId: string, Manufacturer: string, Model: string, SerialNumber: string, InstallDate: datetime, RatedPowerKw: real, NominalRpm: real, TempMaxC: real, VibMaxMmS: real, Criticality: string)[
+"M-CKR-L1-01", "CKR-L1 Injection Molder A", "InjectionMolder", "LN-CKR-01", "PLT-CKR", "Haitian", "Mars MA3800", "INJ-17-4933", datetime(2017-01-15), 45.0, 1450.0, 95.0, 7.1, "A",
+"M-CKR-L1-02", "CKR-L1 Injection Molder B", "InjectionMolder", "LN-CKR-01", "PLT-CKR", "Haitian", "Mars MA3800", "INJ-15-4519", datetime(2015-05-03), 45.0, 1450.0, 95.0, 7.1, "A",
+"M-CKR-L1-03", "CKR-L1 Chiller", "Chiller", "LN-CKR-01", "PLT-CKR", "Daikin", "EWAD-TZ 300", "CHI-17-4581", datetime(2017-11-23), 30.0, 2900.0, 70.0, 7.1, "B",
+"M-CKR-L1-04", "CKR-L1 Air Compressor", "AirCompressor", "LN-CKR-01", "PLT-CKR", "Atlas Copco", "GA55 VSD+", "AIR-19-8654", datetime(2019-02-19), 55.0, 2950.0, 95.0, 7.1, "A",
+"M-CKR-L2-01", "CKR-L2 Robot Arm A", "RobotArm", "LN-CKR-02", "PLT-CKR", "FANUC", "M-20iD/25", "ROB-13-4679", datetime(2013-07-12), 7.5, 3000.0, 70.0, 4.5, "B",
+"M-CKR-L2-02", "CKR-L2 Robot Arm B", "RobotArm", "LN-CKR-02", "PLT-CKR", "FANUC", "M-20iD/25", "ROB-16-1981", datetime(2016-05-15), 7.5, 3000.0, 70.0, 4.5, "B",
+"M-CKR-L2-03", "CKR-L2 Conveyor", "Conveyor", "LN-CKR-02", "PLT-CKR", "Interroll", "RollerDrive EC5000", "CON-16-5754", datetime(2016-02-18), 5.5, 1450.0, 70.0, 4.5, "B",
+"M-CKR-L2-04", "CKR-L2 Air Compressor", "AirCompressor", "LN-CKR-02", "PLT-CKR", "Atlas Copco", "GA55 VSD+", "AIR-23-8598", datetime(2023-07-16), 55.0, 2950.0, 95.0, 7.1, "A",
+"M-KRW-L1-01", "KRW-L1 CNC Mill A", "CNCMill", "LN-KRW-01", "PLT-KRW", "DMG MORI", "DMU 50", "CNC-20-6780", datetime(2020-01-01), 22.0, 8000.0, 80.0, 4.5, "A",
+"M-KRW-L1-02", "KRW-L1 CNC Mill B", "CNCMill", "LN-KRW-01", "PLT-KRW", "DMG MORI", "DMU 50", "CNC-14-6391", datetime(2014-08-03), 22.0, 8000.0, 80.0, 4.5, "A",
+"M-KRW-L1-03", "KRW-L1 Conveyor", "Conveyor", "LN-KRW-01", "PLT-KRW", "Interroll", "RollerDrive EC5000", "CON-22-2101", datetime(2022-09-20), 5.5, 1450.0, 70.0, 4.5, "B",
+"M-KRW-L1-04", "KRW-L1 Air Compressor", "AirCompressor", "LN-KRW-01", "PLT-KRW", "Atlas Copco", "GA55 VSD+", "AIR-18-1855", datetime(2018-03-12), 55.0, 2950.0, 95.0, 7.1, "A",
+"M-KRW-L2-01", "KRW-L2 Packer A", "Packer", "LN-KRW-02", "PLT-KRW", "Bosch", "Pack 403", "PAC-14-5811", datetime(2014-12-04), 11.0, 1450.0, 70.0, 4.5, "B",
+"M-KRW-L2-02", "KRW-L2 Packer B", "Packer", "LN-KRW-02", "PLT-KRW", "Bosch", "Pack 403", "PAC-16-3786", datetime(2016-05-26), 11.0, 1450.0, 70.0, 4.5, "B",
+"M-KRW-L2-03", "KRW-L2 Conveyor", "Conveyor", "LN-KRW-02", "PLT-KRW", "Interroll", "RollerDrive EC5000", "CON-14-1088", datetime(2014-05-26), 5.5, 1450.0, 70.0, 4.5, "B",
+"M-KRW-L2-04", "KRW-L2 Air Compressor", "AirCompressor", "LN-KRW-02", "PLT-KRW", "Atlas Copco", "GA55 VSD+", "AIR-16-9667", datetime(2016-02-01), 55.0, 2950.0, 95.0, 7.1, "A",
+"M-SBY-L1-01", "SBY-L1 Injection Molder A", "InjectionMolder", "LN-SBY-01", "PLT-SBY", "Haitian", "Mars MA3800", "INJ-19-9536", datetime(2019-01-03), 45.0, 1450.0, 95.0, 7.1, "A",
+"M-SBY-L1-02", "SBY-L1 Injection Molder B", "InjectionMolder", "LN-SBY-01", "PLT-SBY", "Haitian", "Mars MA3800", "INJ-14-2623", datetime(2014-07-26), 45.0, 1450.0, 95.0, 7.1, "A",
+"M-SBY-L1-03", "SBY-L1 Chiller", "Chiller", "LN-SBY-01", "PLT-SBY", "Daikin", "EWAD-TZ 300", "CHI-13-3977", datetime(2013-07-05), 30.0, 2900.0, 70.0, 7.1, "B",
+"M-SBY-L1-04", "SBY-L1 Air Compressor", "AirCompressor", "LN-SBY-01", "PLT-SBY", "Atlas Copco", "GA55 VSD+", "AIR-18-2206", datetime(2018-07-22), 55.0, 2950.0, 95.0, 7.1, "A",
+"M-SBY-L2-01", "SBY-L2 Robot Arm A", "RobotArm", "LN-SBY-02", "PLT-SBY", "FANUC", "M-20iD/25", "ROB-17-2896", datetime(2017-05-12), 7.5, 3000.0, 70.0, 4.5, "B",
+"M-SBY-L2-02", "SBY-L2 Robot Arm B", "RobotArm", "LN-SBY-02", "PLT-SBY", "FANUC", "M-20iD/25", "ROB-22-4942", datetime(2022-06-02), 7.5, 3000.0, 70.0, 4.5, "B",
+"M-SBY-L2-03", "SBY-L2 Conveyor", "Conveyor", "LN-SBY-02", "PLT-SBY", "Interroll", "RollerDrive EC5000", "CON-23-5870", datetime(2023-04-15), 5.5, 1450.0, 70.0, 4.5, "B",
+"M-SBY-L2-04", "SBY-L2 Air Compressor", "AirCompressor", "LN-SBY-02", "PLT-SBY", "Atlas Copco", "GA55 VSD+", "AIR-17-1266", datetime(2017-12-05), 55.0, 2950.0, 95.0, 7.1, "A"
+]

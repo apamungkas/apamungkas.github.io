@@ -1,0 +1,15 @@
+relationship rel_line_site
+	fromColumn: dim_production_line.SiteId
+	toColumn: dim_site.SiteId
+
+relationship rel_machine_line
+	fromColumn: dim_machine.LineId
+	toColumn: dim_production_line.LineId
+
+relationship rel_workorder_machine
+	fromColumn: maintenance_work_order.MachineId
+	toColumn: dim_machine.MachineId
+
+relationship rel_telemetry_machine
+	fromColumn: machine_telemetry.MachineId
+	toColumn: dim_machine.MachineId

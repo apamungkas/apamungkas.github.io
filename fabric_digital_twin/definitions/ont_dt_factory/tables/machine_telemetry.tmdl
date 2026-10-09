@@ -1,0 +1,63 @@
+table machine_telemetry
+	lineageTag: 3ae7c4c1-9ba2-4a38-8f88-9eb24b56c5d1
+
+	column Timestamp
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b457eb83-9981-4edf-942a-bc2541585c62
+		sourceColumn: Timestamp
+
+	column MachineId
+		dataType: string
+		lineageTag: 42e2cc8b-a3c8-4bc6-b7d8-2cdae66c3959
+		sourceColumn: MachineId
+
+	column Status
+		dataType: string
+		lineageTag: a676d0b5-4e15-4db9-88f3-f1e0c634faa0
+		sourceColumn: Status
+
+	column TemperatureC
+		dataType: double
+		lineageTag: 70559efd-3487-4798-9170-107b317e5bae
+		sourceColumn: TemperatureC
+
+	column VibrationMmS
+		dataType: double
+		lineageTag: cef47b33-2c8e-4725-a9a8-109d9b8fdb4c
+		sourceColumn: VibrationMmS
+
+	column PressureBar
+		dataType: double
+		lineageTag: 9600ad4d-cec8-4238-ae21-a244c4981ccb
+		sourceColumn: PressureBar
+
+	column PowerKw
+		dataType: double
+		lineageTag: cd7dc865-9b9b-41f6-bf3f-904deb135068
+		sourceColumn: PowerKw
+
+	column Rpm
+		dataType: double
+		lineageTag: 5bf531d5-9251-458f-9bad-3490cd69f0ca
+		sourceColumn: Rpm
+
+	column UnitsProduced
+		dataType: int64
+		formatString: 0
+		lineageTag: 07ea47f8-99c8-40ac-8b16-c8ad262d3d61
+		sourceColumn: UnitsProduced
+
+	column UnitsRejected
+		dataType: int64
+		formatString: 0
+		lineageTag: 52279d56-39fd-46bb-b416-2b0bba297a86
+		sourceColumn: UnitsRejected
+
+	partition machine_telemetry = entity
+		mode: directLake
+		source
+			entityName: machine_telemetry
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

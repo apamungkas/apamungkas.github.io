@@ -1,0 +1,12 @@
+rule TemperatureLimit
+	statement: A machine whose temperature exceeds its TempMaxC limit is overheating; an overheating injection molder also produces more rejected units.
+	lineageTag: 849a180f-6259-4eae-a481-a7004665fbdc
+
+	ruleReferencedEntity Machine
+		propertyScope: specific
+
+		ruleReferencedProperty TemperatureC
+
+		ruleReferencedProperty TempMaxC
+
+		ruleReferencedProperty UnitsRejected

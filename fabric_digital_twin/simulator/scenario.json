@@ -1,0 +1,8 @@
+{
+    "intervalSeconds":  10,
+    "bearingWear":  true,
+    "overheatSchedule":  true,
+    "forceOverheat":  false,
+    "conveyorFault":  false,
+    "vibrationSpikeMachine":  ""
+}

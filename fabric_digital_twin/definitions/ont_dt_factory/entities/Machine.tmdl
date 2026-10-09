@@ -1,0 +1,227 @@
+/// A production machine (equipment) on a line, with live telemetry streamed from the plant gateway every 10 seconds.
+entity Machine
+	lineageTag: a2ac3e95-24ce-4221-be52-a8c0a7dd3391
+	backingTable: dim_machine
+	keyProperty: MachineId
+	synonym equipment
+	synonym asset
+	synonym mesin
+
+	/// Unique machine identifier.
+	property MachineId
+		dataType: string
+		lineageTag: bf0a5133-03a6-48b2-a144-02d6a085e82d
+
+		backingConfiguration
+			valueColumn: dim_machine.MachineId
+
+	/// Machine display name.
+	property MachineName
+		dataType: string
+		lineageTag: 04f91868-3a94-4b18-b3ab-03d8d372e6c2
+
+		backingConfiguration
+			valueColumn: dim_machine.MachineName
+
+	/// InjectionMolder, AirCompressor, Chiller, RobotArm, Conveyor, CNCMill or Packer.
+	property MachineType
+		dataType: string
+		lineageTag: 79d4c084-2afb-48f5-8314-81503c65da7a
+
+		backingConfiguration
+			valueColumn: dim_machine.MachineType
+
+	/// Production line the machine belongs to.
+	property MachineLineId
+		dataType: string
+		lineageTag: 5863ab48-563a-42a0-ac79-f2e24d0c8ac3
+
+		backingConfiguration
+			valueColumn: dim_machine.LineId
+
+	/// Plant the machine belongs to.
+	property MachineSiteId
+		dataType: string
+		lineageTag: e783dfed-845d-4ed2-a82f-07b8aa4cbb33
+
+		backingConfiguration
+			valueColumn: dim_machine.SiteId
+
+	/// Machine manufacturer.
+	property Manufacturer
+		dataType: string
+		lineageTag: a5dc6e83-7935-4075-8182-903f0903af9a
+
+		backingConfiguration
+			valueColumn: dim_machine.Manufacturer
+
+	/// Machine model.
+	property Model
+		dataType: string
+		lineageTag: 2b57c764-0303-4a36-b254-6731c1719304
+
+		backingConfiguration
+			valueColumn: dim_machine.Model
+
+	/// Machine serial number.
+	property SerialNumber
+		dataType: string
+		lineageTag: 402eb2a9-6d31-4dc5-8bd8-fa49c7610314
+
+		backingConfiguration
+			valueColumn: dim_machine.SerialNumber
+
+	/// Installation date.
+	property InstallDate
+		dataType: dateTime
+		lineageTag: 71a21496-8133-40d2-80f2-3a826b4c449a
+
+		backingConfiguration
+			valueColumn: dim_machine.InstallDate
+
+	/// Rated electrical power (kW).
+	property RatedPowerKw
+		dataType: double
+		lineageTag: 98bfcb55-bd04-4204-8a24-869340a9c97a
+
+		backingConfiguration
+			valueColumn: dim_machine.RatedPowerKw
+
+	/// Nominal speed (rpm).
+	property NominalRpm
+		dataType: double
+		lineageTag: f8a26328-3db0-44c3-ae6b-99a6242317b0
+
+		backingConfiguration
+			valueColumn: dim_machine.NominalRpm
+
+	/// Maximum allowed temperature (degrees C).
+	property TempMaxC
+		dataType: double
+		lineageTag: 797feb94-f103-48fa-ae1f-620b598b256b
+
+		backingConfiguration
+			valueColumn: dim_machine.TempMaxC
+
+	/// Maximum allowed vibration velocity (mm/s, ISO 10816).
+	property VibMaxMmS
+		dataType: double
+		lineageTag: 03620f68-2848-43f1-8382-e4dbdbb1ee99
+
+		backingConfiguration
+			valueColumn: dim_machine.VibMaxMmS
+
+	/// Asset criticality class A (critical) or B.
+	property Criticality
+		dataType: string
+		lineageTag: ad5c1e38-079a-4b42-995c-7cb7415b2469
+
+		backingConfiguration
+			valueColumn: dim_machine.Criticality
+
+	/// Machine temperature (degrees C).
+	property TemperatureC
+		dataType: TimeSeries<double>
+		lineageTag: 61a2f100-f111-47e9-800c-481f68df546e
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.TemperatureC
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Vibration velocity RMS (mm/s).
+	property VibrationMmS
+		dataType: TimeSeries<double>
+		lineageTag: 1ba6f64f-fa2e-412e-a01f-32b148fbfc85
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.VibrationMmS
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Process or pneumatic pressure (bar).
+	property PressureBar
+		dataType: TimeSeries<double>
+		lineageTag: c8c03164-2b9c-4d1b-9dc6-fc0fca3bb479
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.PressureBar
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Electrical power draw (kW).
+	property PowerKw
+		dataType: TimeSeries<double>
+		lineageTag: 2936d32b-294c-40eb-a079-9059d8bf13b5
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.PowerKw
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Shaft or spindle speed (rpm).
+	property Rpm
+		dataType: TimeSeries<double>
+		lineageTag: 01c6923a-2c65-40a9-beab-5b0f5efdf2ed
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.Rpm
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Operating status: Running, Idle, Fault or Blocked.
+	property OperatingStatus
+		dataType: TimeSeries<string>
+		lineageTag: 1762d184-720f-4d19-bfa1-41efe3ce2311
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.Status
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Units produced in the reading interval.
+	property UnitsProduced
+		dataType: TimeSeries<int64>
+		lineageTag: 79eb9a8c-9860-42dc-abe4-e2c2133eff56
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.UnitsProduced
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Units rejected in the reading interval.
+	property UnitsRejected
+		dataType: TimeSeries<int64>
+		lineageTag: b5333e02-ebe3-4449-9f92-44bd08fd4635
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.UnitsRejected
+			orderingColumn: machine_telemetry.Timestamp
+
+	/// Timestamp of the telemetry reading (UTC).
+	property TelemetryTimestamp
+		dataType: TimeSeries<dateTime>
+		lineageTag: 07baa679-801a-4f28-9ed3-cf45e2108c62
+
+		backingConfiguration
+			type: timeSeries
+			valueColumn: machine_telemetry.Timestamp
+			orderingColumn: machine_telemetry.Timestamp
+
+	additionalBackingTable
+		table: machine_telemetry
+		relationship: rel_telemetry_machine
+
+	/// Live operations dashboard (Real-Time Dashboard rtd_dt_factory).
+	resourceLink
+		item
+			workspaceId: <WORKSPACE_ID>
+			itemId: <DASHBOARD_ID>
+
+	/// Digital Twin Builder model of the plants (dtb_dt_factory).
+	resourceLink
+		item
+			workspaceId: <WORKSPACE_ID>
+			itemId: <DTB_ID>
+

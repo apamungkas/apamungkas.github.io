@@ -1,0 +1,21 @@
+{
+  "_comment": "Template for ids.json. The build scripts (scripts/*.py) read and write ids.json automatically as you run them in order (see README.md). Copy this file to ids.json and run the build scripts, or just run the scripts as-is and let them create ids.json from scratch.",
+  "workspaceId": "<WORKSPACE_ID>",
+  "capacityId": "<CAPACITY_ID>",
+  "lakehouseId": "<LAKEHOUSE_ID>",
+  "eventhouseId": "<EVENTHOUSE_ID>",
+  "kqlDatabaseId": "<KQL_DATABASE_ID>",
+  "kqlDatabaseName": "eh_dt_factory",
+  "queryUri": "https://<your-cluster>.kusto.fabric.microsoft.com",
+  "ingestionUri": "https://ingest-<your-cluster>.kusto.fabric.microsoft.com",
+  "sqlEndpointId": "<SQL_ENDPOINT_ID>",
+  "notebookId": "<NOTEBOOK_ID>",
+  "eventstreamId": "<EVENTSTREAM_ID>",
+  "eventstreamSourceId": "<EVENTSTREAM_SOURCE_ID>",
+  "eventHubNamespace": "<your-eventhub-namespace>.servicebus.windows.net",
+  "sqlEndpointHost": "<your-sql-endpoint-host>.datawarehouse.fabric.microsoft.com",
+  "dashboardId": "<DASHBOARD_ID>",
+  "ontologyId": "<ONTOLOGY_ID>",
+  "activatorId": "<ACTIVATOR_ID>",
+  "dtbId": "<DTB_ID>"
+}

@@ -1,0 +1,68 @@
+table maintenance_work_order
+	lineageTag: b213aec0-51e4-4acb-b3de-44882916df70
+
+	column WorkOrderId
+		dataType: string
+		lineageTag: 78bda2ad-95d3-4973-8ad0-85d3ebfa9b54
+		sourceColumn: WorkOrderId
+
+	column MachineId
+		dataType: string
+		lineageTag: 9d130dd1-6464-4117-9bf1-0632d11560e5
+		sourceColumn: MachineId
+
+	column WorkOrderType
+		dataType: string
+		lineageTag: b924deb7-9b47-436f-bff5-f691b164dcd2
+		sourceColumn: WorkOrderType
+
+	column Priority
+		dataType: string
+		lineageTag: 22982229-9d61-424d-bb71-fc442d89a084
+		sourceColumn: Priority
+
+	column Status
+		dataType: string
+		lineageTag: b8bf8059-2c80-4d48-8677-99a29c55f3bc
+		sourceColumn: Status
+
+	column Description
+		dataType: string
+		lineageTag: 696afb69-4c14-41e0-8cf5-3dbc07b2c00b
+		sourceColumn: Description
+
+	column OpenedAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: f93e5f59-c864-48f3-9bb3-3fbd230d1432
+		sourceColumn: OpenedAt
+
+	column ClosedAt
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 90935e9c-4f0f-47ec-a323-ddfb3ccd6960
+		sourceColumn: ClosedAt
+
+	column Technician
+		dataType: string
+		lineageTag: fefe2663-a96a-4a08-be37-312e367defc2
+		sourceColumn: Technician
+
+	column DowntimeMinutes
+		dataType: int64
+		formatString: 0
+		lineageTag: 71e4feb6-0733-48ac-9d55-c2f381b47c94
+		sourceColumn: DowntimeMinutes
+
+	column CostIdr
+		dataType: double
+		lineageTag: 356b3194-50d6-499c-8dd7-3f35aa0ec2ee
+		sourceColumn: CostIdr
+
+	partition maintenance_work_order = entity
+		mode: directLake
+		source
+			entityName: maintenance_work_order
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

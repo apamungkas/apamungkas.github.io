@@ -1,0 +1,278 @@
+[
+ {
+  "uniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55",
+  "payload": {
+   "name": "Digital twin machine alerts",
+   "type": "kqlQueries"
+  },
+  "type": "container-v1"
+ },
+ {
+  "uniqueIdentifier": "fe5853e7-9c01-41fd-98a1-58ffe2f247cc",
+  "payload": {
+   "name": "Machine telemetry (eh_dt_factory)",
+   "runSettings": {
+    "executionIntervalInSeconds": 60
+   },
+   "query": {
+    "queryString": "declare query_parameters(startTime:datetime, endTime:datetime);\nMachineTelemetry\n| where Timestamp between (startTime .. endTime)\n| project Timestamp, MachineId, SiteId, LineId, MachineType, Status, TemperatureC, VibrationMmS"
+   },
+   "eventhouseItem": {
+    "itemId": "<KQL_DATABASE_ID>",
+    "workspaceId": "<WORKSPACE_ID>",
+    "itemType": "KustoDatabase"
+   },
+   "queryParameters": [
+    {
+     "name": "startTime",
+     "type": "DURATION_START",
+     "value": "2026-10-08T14:54:46Z"
+    },
+    {
+     "name": "endTime",
+     "type": "DURATION_END",
+     "value": "2026-10-08T15:04:46Z"
+    }
+   ],
+   "eventTimeSettings": {
+    "timeFieldName": "Timestamp",
+    "ingestionDelayInSeconds": 120,
+    "timeZone": "UTC"
+   },
+   "metadata": {
+    "workspaceId": "<WORKSPACE_ID>",
+    "measureName": "",
+    "querySetId": "",
+    "queryId": ""
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   }
+  },
+  "type": "kqlSource-v1"
+ },
+ {
+  "uniqueIdentifier": "4173824a-5280-4d20-948e-e680c015c3ba",
+  "payload": {
+   "name": "Machine telemetry events",
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Event",
+    "instance": "{\"templateId\":\"SourceEvent\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"SourceEventStep\",\"id\":\"c58e96d1-137c-4626-abfd-d850f1aafe1e\",\"rows\":[{\"name\":\"SourceSelector\",\"kind\":\"SourceReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"fe5853e7-9c01-41fd-98a1-58ffe2f247cc\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689",
+  "payload": {
+   "name": "Machine",
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Object"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "aec89c51-b28e-4496-8fb7-6221ff49212a",
+  "payload": {
+   "name": "MachineId",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"IdentityPartAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"IdPartStep\",\"id\":\"f2ff184e-ffef-4d38-88a0-4e57a588af62\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "1c372ecb-aadf-4035-adf3-56cc784e8c09",
+  "payload": {
+   "name": "Machine events",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Event",
+    "instance": "{\"templateId\":\"SplitEvent\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"SplitEventStep\",\"id\":\"39cfc522-5004-494b-a6fb-c0bd3f6104a5\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"4173824a-5280-4d20-948e-e680c015c3ba\"}]}]},{\"name\":\"FieldIdMapping\",\"kind\":\"FieldIdMapping\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"MachineId\"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"aec89c51-b28e-4496-8fb7-6221ff49212a\"}],\"name\":\"idPart\"}]},{\"name\":\"SplitEventOptions\",\"kind\":\"EventOptions\",\"arguments\":[{\"name\":\"isAuthoritative\",\"type\":\"boolean\",\"value\":true}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "f299d4bb-27fd-4050-9cd6-b5c7f21d3c40",
+  "payload": {
+   "name": "Machine",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"d44d40ea-bea9-4abb-830a-07792b56f557\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"MachineId\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"928f07fc-001c-4384-9b9c-f626508c6d7c\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "94ba1d02-48fc-40fb-9ba4-d03be963a763",
+  "payload": {
+   "name": "Site",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"099ea012-df04-4853-b53b-ef5b47652227\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"SiteId\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"1c88cc14-7350-456a-a811-e0d4366f64bb\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "210bf1a9-f284-4594-9121-4eaa56f5a13b",
+  "payload": {
+   "name": "Line",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"a901785d-44be-430f-bdc5-29d82b46d316\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"LineId\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"57cab7ab-20aa-40b1-a5a4-49b531986ced\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "2658841a-2785-45b1-afab-b874c460ef7a",
+  "payload": {
+   "name": "Machine type",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"02fb588d-016a-47e7-a759-f90a6dcddb38\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"MachineType\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"db9e5da0-33f9-4981-b529-d682fa445477\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "591324f9-6449-4c8d-81e0-9bacdbf200f6",
+  "payload": {
+   "name": "Status",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"35f789dd-d22d-4365-9864-315f67bfa682\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"Status\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"970b17f4-c892-47e9-8c6e-71dfa021185d\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Text\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "0c01709c-1ffa-4ba3-9a5a-d6703b272ee5",
+  "payload": {
+   "name": "Temperature (C)",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"1b80c5aa-e8d5-4ef4-9533-cc00836658c2\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"TemperatureC\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"5af27f80-32b4-4218-88a9-e50773edce54\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Number\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "8e29f9dc-6be5-4d8a-b248-29f01e0cd9e1",
+  "payload": {
+   "name": "Vibration (mm/s)",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Attribute",
+    "instance": "{\"templateId\":\"BasicEventAttribute\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"EventSelectStep\",\"id\":\"850c48ef-3096-4360-b5c7-56d3a8d208fe\",\"rows\":[{\"name\":\"EventSelector\",\"kind\":\"Event\",\"arguments\":[{\"kind\":\"EventReference\",\"type\":\"complex\",\"name\":\"event\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"1c372ecb-aadf-4035-adf3-56cc784e8c09\"}]}]},{\"name\":\"EventFieldSelector\",\"kind\":\"EventField\",\"arguments\":[{\"name\":\"fieldName\",\"type\":\"string\",\"value\":\"VibrationMmS\"}]}]},{\"name\":\"EventComputeStep\",\"id\":\"444079c3-bfa5-4093-9dac-08860e7e6bc3\",\"rows\":[{\"name\":\"TypeAssertion\",\"kind\":\"TypeAssertion\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"Number\"},{\"name\":\"format\",\"type\":\"string\",\"value\":\"\"}]}]}]}"
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "b7c29021-0270-4434-bf64-6978ad31eee0",
+  "payload": {
+   "name": "High vibration (> 7.1 mm/s)",
+   "description": "Created by: skills-for-fabric",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Rule",
+    "instance": "{\"templateId\":\"AttributeTrigger\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"ScalarSelectStep\",\"id\":\"e1873836-9e7c-4a3d-9d4b-9f5eee8d2138\",\"rows\":[{\"name\":\"AttributeSelector\",\"kind\":\"Attribute\",\"arguments\":[{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"8e29f9dc-6be5-4d8a-b248-29f01e0cd9e1\"}],\"name\":\"attribute\"}]}]},{\"name\":\"ScalarDetectStep\",\"id\":\"987ae96f-4da6-4b5b-a0b2-9f1ad5f1b53c\",\"rows\":[{\"name\":\"NumberBecomes\",\"kind\":\"NumberBecomes\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"BecomesGreaterThan\"},{\"name\":\"value\",\"type\":\"number\",\"value\":7.1}]}]},{\"name\":\"ActStep\",\"id\":\"90ace087-2ed7-45af-8b84-9cc3ef0d34ec\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"admin@YourTenantName.onmicrosoft.com\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"[Digital Twin] High vibration on \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}]}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Machine vibration crossed 7.1 mm/s (ISO 10816 zone D) - possible bearing wear\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Machine \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\" (\"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"2658841a-2785-45b1-afab-b874c460ef7a\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\") at \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"94ba1d02-48fc-40fb-9ba4-d03be963a763\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\" reported vibration (mm/s) \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"8e29f9dc-6be5-4d8a-b248-29f01e0cd9e1\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\". Open the rtd_dt_factory dashboard and the ont_dt_factory ontology in ws_demo_digital_twin to investigate.\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Machine\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Site\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"94ba1d02-48fc-40fb-9ba4-d03be963a763\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Line\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"210bf1a9-f284-4594-9121-4eaa56f5a13b\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Machine type\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"2658841a-2785-45b1-afab-b874c460ef7a\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Status\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"591324f9-6449-4c8d-81e0-9bacdbf200f6\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Temperature (C)\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"0c01709c-1ffa-4ba3-9a5a-d6703b272ee5\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Vibration (mm/s)\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"8e29f9dc-6be5-4d8a-b248-29f01e0cd9e1\"}],\"name\":\"reference\"}]}]}]}]}]}",
+    "settings": {
+     "shouldRun": true,
+     "shouldApplyRuleOnUpdate": false
+    }
+   }
+  },
+  "type": "timeSeriesView-v1"
+ },
+ {
+  "uniqueIdentifier": "2acd2eec-3f1b-4da8-ab7e-62d014684361",
+  "payload": {
+   "name": "Overheating (> 95 C)",
+   "description": "Created by: skills-for-fabric",
+   "parentObject": {
+    "targetUniqueIdentifier": "7598128f-b76e-43b4-bdcd-caf0de43f689"
+   },
+   "parentContainer": {
+    "targetUniqueIdentifier": "422283c7-79ce-43f6-835e-866538100a55"
+   },
+   "definition": {
+    "type": "Rule",
+    "instance": "{\"templateId\":\"AttributeTrigger\",\"templateVersion\":\"1.2.4\",\"steps\":[{\"name\":\"ScalarSelectStep\",\"id\":\"4e7700d2-200f-414b-916d-0c628b71faa1\",\"rows\":[{\"name\":\"AttributeSelector\",\"kind\":\"Attribute\",\"arguments\":[{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"0c01709c-1ffa-4ba3-9a5a-d6703b272ee5\"}],\"name\":\"attribute\"}]}]},{\"name\":\"ScalarDetectStep\",\"id\":\"85e8926a-4926-40e2-b17c-057a05f16d50\",\"rows\":[{\"name\":\"NumberBecomes\",\"kind\":\"NumberBecomes\",\"arguments\":[{\"name\":\"op\",\"type\":\"string\",\"value\":\"BecomesGreaterThan\"},{\"name\":\"value\",\"type\":\"number\",\"value\":95.0}]}]},{\"name\":\"ActStep\",\"id\":\"17b3f73f-a1de-4d7e-968e-bf45a6d63e8d\",\"rows\":[{\"name\":\"EmailBinding\",\"kind\":\"EmailMessage\",\"arguments\":[{\"name\":\"messageLocale\",\"type\":\"string\",\"value\":\"en-us\"},{\"name\":\"sentTo\",\"type\":\"array\",\"values\":[{\"type\":\"string\",\"value\":\"admin@YourTenantName.onmicrosoft.com\"}]},{\"name\":\"copyTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"bCCTo\",\"type\":\"array\",\"values\":[]},{\"name\":\"subject\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"[Digital Twin] Overheating on \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}]}]},{\"name\":\"headline\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Machine temperature crossed 95 C - check heater bands and cooling circuit\"}]},{\"name\":\"optionalMessage\",\"type\":\"array\",\"values\":[{\"name\":\"string\",\"type\":\"string\",\"value\":\"Machine \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\" (\"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"2658841a-2785-45b1-afab-b874c460ef7a\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\") at \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"94ba1d02-48fc-40fb-9ba4-d03be963a763\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\" reported temperature (C) \"},{\"kind\":\"AttributeReference\",\"type\":\"complex\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"0c01709c-1ffa-4ba3-9a5a-d6703b272ee5\"}]},{\"name\":\"string\",\"type\":\"string\",\"value\":\". Open the rtd_dt_factory dashboard and the ont_dt_factory ontology in ws_demo_digital_twin to investigate.\"}]},{\"name\":\"additionalInformation\",\"type\":\"array\",\"values\":[{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Machine\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"f299d4bb-27fd-4050-9cd6-b5c7f21d3c40\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Site\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"94ba1d02-48fc-40fb-9ba4-d03be963a763\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Line\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"210bf1a9-f284-4594-9121-4eaa56f5a13b\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Machine type\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"2658841a-2785-45b1-afab-b874c460ef7a\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Status\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"591324f9-6449-4c8d-81e0-9bacdbf200f6\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Temperature (C)\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"0c01709c-1ffa-4ba3-9a5a-d6703b272ee5\"}],\"name\":\"reference\"}]},{\"kind\":\"NameReferencePair\",\"type\":\"complex\",\"arguments\":[{\"name\":\"name\",\"type\":\"string\",\"value\":\"Vibration (mm/s)\"},{\"kind\":\"AttributeReference\",\"type\":\"complexReference\",\"arguments\":[{\"name\":\"entityId\",\"type\":\"string\",\"value\":\"8e29f9dc-6be5-4d8a-b248-29f01e0cd9e1\"}],\"name\":\"reference\"}]}]}]}]}]}",
+    "settings": {
+     "shouldRun": true,
+     "shouldApplyRuleOnUpdate": false
+    }
+   }
+  },
+  "type": "timeSeriesView-v1"
+ }
+]

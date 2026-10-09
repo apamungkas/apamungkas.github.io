@@ -1,0 +1,18 @@
+model Model
+
+ref table dim_site
+ref table dim_production_line
+ref table dim_machine
+ref table maintenance_work_order
+ref table machine_telemetry
+
+ref entity Site
+ref entity ProductionLine
+ref entity Machine
+ref entity WorkOrder
+
+ref namespace default
+
+ref rule VibrationLimit
+ref rule TemperatureLimit
+ref rule LineStoppage

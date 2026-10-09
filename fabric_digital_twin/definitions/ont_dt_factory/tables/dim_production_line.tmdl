@@ -1,0 +1,36 @@
+table dim_production_line
+	lineageTag: b41ff946-279a-4862-96c6-868a5c5abb77
+
+	column LineId
+		dataType: string
+		lineageTag: aa267236-ef27-4e09-ab18-ca5874938ab5
+		sourceColumn: LineId
+
+	column SiteId
+		dataType: string
+		lineageTag: 2c9ca7af-5ca0-483d-9afd-e02c581de7e9
+		sourceColumn: SiteId
+
+	column LineName
+		dataType: string
+		lineageTag: f3688354-34ca-4c49-af77-5c990130987e
+		sourceColumn: LineName
+
+	column LineType
+		dataType: string
+		lineageTag: f3059757-0d01-4f7e-a741-419657ad5b2d
+		sourceColumn: LineType
+
+	column TargetUnitsPerHour
+		dataType: int64
+		formatString: 0
+		lineageTag: 93478c2e-afce-4073-8931-f5456c708226
+		sourceColumn: TargetUnitsPerHour
+
+	partition dim_production_line = entity
+		mode: directLake
+		source
+			entityName: dim_production_line
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+

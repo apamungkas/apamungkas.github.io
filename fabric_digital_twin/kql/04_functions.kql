@@ -1,0 +1,76 @@
+.create-or-alter materialized-view with (backfill=true, docString="Latest telemetry per machine") MachineLatestState on table MachineTelemetry {
+MachineTelemetry
+| summarize arg_max(Timestamp, *) by MachineId
+}
+
+.create-or-alter function with (folder="DigitalTwin", docstring="Latest reading per machine with asset context and health state") MachineCurrentState() {
+MachineLatestState
+| join kind=leftouter DimMachine on MachineId
+| join kind=leftouter (DimLine | project LineId, LineName, LineType) on LineId
+| join kind=leftouter (DimSite | project SiteId, SiteName, City, Latitude, Longitude) on SiteId
+| extend MinutesSinceLastReading = datetime_diff("minute", now(), Timestamp)
+| extend HealthState = case(
+    MinutesSinceLastReading > 15, "Offline",
+    Status == "Fault", "Critical",
+    TemperatureC > TempMaxC or VibrationMmS > VibMaxMmS, "Critical",
+    Status == "Blocked", "Warning",
+    TemperatureC > 0.9 * TempMaxC or VibrationMmS > 0.8 * VibMaxMmS, "Warning",
+    Status == "Idle", "Idle",
+    "Healthy")
+| project Timestamp, SiteId, SiteName, City, Latitude, Longitude, LineId, LineName, LineType, MachineId, MachineName, MachineType, Criticality,
+          Status, HealthState, TemperatureC, TempMaxC, VibrationMmS, VibMaxMmS, PressureBar, PowerKw, Rpm, MinutesSinceLastReading
+}
+
+.create-or-alter function with (folder="DigitalTwin", docstring="Health score 0-100 per machine over a lookback window") MachineHealthScore(lookback: timespan = 1h) {
+MachineTelemetry
+| where Timestamp > ago(lookback)
+| summarize AvgTemp = avg(TemperatureC), MaxTemp = max(TemperatureC), AvgVib = avg(VibrationMmS), MaxVib = max(VibrationMmS),
+            FaultShare = countif(Status in ("Fault", "Blocked")) * 1.0 / count(), Readings = count() by MachineId
+| join kind=inner DimMachine on MachineId
+| extend TempRatio = MaxTemp / TempMaxC, VibRatio = MaxVib / VibMaxMmS
+| extend HealthScore = round(max_of(0.0, 100.0
+      - 60.0 * max_of(0.0, VibRatio - 0.5)
+      - 80.0 * max_of(0.0, TempRatio - 0.8)
+      - 100.0 * FaultShare), 1)
+| project MachineId, MachineName, MachineType, LineId, SiteId, Criticality, HealthScore, MaxTemp, TempMaxC, MaxVib, VibMaxMmS, FaultShare, Readings
+| order by HealthScore asc
+}
+
+.create-or-alter function with (folder="DigitalTwin", docstring="Anomalies per machine on a metric using series_decompose_anomalies") MachineAnomalies(lookback: timespan = 2d, metric: string = "VibrationMmS", sensitivity: real = 2.5) {
+MachineTelemetry
+| where Timestamp > ago(lookback)
+| extend Value = case(metric == "TemperatureC", TemperatureC, metric == "PressureBar", PressureBar, metric == "PowerKw", PowerKw, metric == "Rpm", Rpm, VibrationMmS)
+| make-series Value = avg(Value) default = real(null) on Timestamp step 10m by MachineId
+| extend Value = series_fill_linear(Value)
+| extend (Anomaly, Score, Baseline) = series_decompose_anomalies(Value, sensitivity, -1, "linefit")
+| mv-expand Timestamp to typeof(datetime), Value to typeof(real), Anomaly to typeof(int), Score to typeof(real), Baseline to typeof(real)
+| where Anomaly != 0
+| join kind=leftouter (DimMachine | project MachineId, MachineName, MachineType, LineId, SiteId) on MachineId
+| project Timestamp, SiteId, LineId, MachineId, MachineName, MachineType, Metric = metric, Value = round(Value, 2), Baseline = round(Baseline, 2), Score = round(Score, 2), Direction = iff(Anomaly > 0, "Spike", "Dip")
+| order by Timestamp desc
+}
+
+.create-or-alter function with (folder="DigitalTwin", docstring="OEE (availability x performance x quality) per production line") LineOEE(lookback: timespan = 24h) {
+let lines = DimLine;
+MachineTelemetry
+| where Timestamp > ago(lookback)
+| summarize Minutes = dcount(bin(Timestamp, 1m)), RunningMinutes = dcountif(bin(Timestamp, 1m), Status == "Running"),
+            Produced = sum(UnitsProduced), Rejected = sum(UnitsRejected),
+            LineDownMinutes = dcountif(bin(Timestamp, 1m), Status in ("Fault", "Blocked")) by LineId
+| join kind=inner lines on LineId
+| extend Availability = round(1.0 - todouble(LineDownMinutes) / Minutes, 4)
+| extend Performance = round(min_of(1.0, todouble(Produced) / (TargetUnitsPerHour * Minutes / 60.0)), 4)
+| extend Quality = round(iff(Produced == 0, 1.0, 1.0 - todouble(Rejected) / Produced), 4)
+| extend OEE = round(Availability * Performance * Quality, 4)
+| project LineId, LineName, SiteId, LineType, Availability, Performance, Quality, OEE, Produced, Rejected, LineDownMinutes
+| order by OEE asc
+}
+
+.create-or-alter function with (folder="DigitalTwin", docstring="Site rollup for the map: machine counts by health state") SiteStatus() {
+MachineCurrentState()
+| summarize Machines = count(), Critical = countif(HealthState == "Critical"), Warning = countif(HealthState == "Warning"),
+            Healthy = countif(HealthState in ("Healthy", "Idle")), Offline = countif(HealthState == "Offline") by SiteId, SiteName, City, Latitude, Longitude
+| extend SiteHealth = case(Critical > 0, "Critical", Warning > 0, "Warning", "Healthy")
+}
+
+.alter-merge table MachineTelemetry policy mirroring dataformat=parquet with (IsEnabled=true, TargetLatencyInMinutes=5, Backfill=true)

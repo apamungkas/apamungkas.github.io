@@ -1,0 +1,72 @@
+table dim_site
+	lineageTag: 546f0dc4-865f-4444-bc49-cdcc809a1dd7
+
+	column SiteId
+		dataType: string
+		lineageTag: a100b894-96c8-4f44-b5e9-0510bdfd1eeb
+		sourceColumn: SiteId
+
+	column SiteName
+		dataType: string
+		lineageTag: c47b3099-a513-49db-a699-a6265fa4db81
+		sourceColumn: SiteName
+
+	column Area
+		dataType: string
+		lineageTag: 898d4ac3-5a47-42c0-aaa2-2aa87ae76d7f
+		sourceColumn: Area
+
+	column City
+		dataType: string
+		lineageTag: e408d175-992d-47fd-8d75-f45834148250
+		sourceColumn: City
+
+	column Province
+		dataType: string
+		lineageTag: 462cdfc6-53a8-4925-8847-1ffdfc35cc61
+		sourceColumn: Province
+
+	column Country
+		dataType: string
+		lineageTag: ca07cdcc-67da-4850-8bdd-6671e70f0d51
+		sourceColumn: Country
+
+	column Latitude
+		dataType: double
+		lineageTag: 7abc9b4a-95df-4999-a684-76b1c3805818
+		sourceColumn: Latitude
+
+	column Longitude
+		dataType: double
+		lineageTag: 6db53386-31c1-44c4-a731-3501522e7c64
+		sourceColumn: Longitude
+
+	column Timezone
+		dataType: string
+		lineageTag: 9f39d637-8522-469a-9392-fd2763572d9d
+		sourceColumn: Timezone
+
+	column PlantManager
+		dataType: string
+		lineageTag: ff4b5324-c2ec-4bda-a225-b9553e755c48
+		sourceColumn: PlantManager
+
+	column Employees
+		dataType: int64
+		formatString: 0
+		lineageTag: d8655399-906c-4fb8-945e-fb249d421a4b
+		sourceColumn: Employees
+
+	column OpenedYear
+		dataType: int64
+		formatString: 0
+		lineageTag: 55209add-264e-4e3b-9218-ffdc5ef255ce
+		sourceColumn: OpenedYear
+
+	partition dim_site = entity
+		mode: directLake
+		source
+			entityName: dim_site
+			schemaName: dbo
+			expressionSource: DatabaseQuery
+
