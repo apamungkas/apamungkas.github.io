@@ -6,18 +6,6 @@ The scenario is post-migration replication: a customer moving SQL Server from AW
 
 > **Synthetic-data lab/POC, not a production-ready replication service.** This project does not migrate an AWS database, replace every DMS capability, or provide HA/DR, automatic failover, or a latency SLA.
 
-This README consolidates the build, exercises, and operating procedures, checked against the supplied scripts.
-
-## Choose a learning path
-
-| Starting point | Procedure |
-| --- | --- |
-| New isolated environment | Complete prerequisites and build steps 1–5, then choose either the interactive labs or the fresh-lab automation sequence. |
-| Existing demonstration | Use its original configured project folder and deployment state. Start with the operating runbook and interactive labs; choose unused generator rounds. Do not provision or reinstall it. |
-| Operator or trainer | Review scheduling, reconciliation, shutdown/resume, cost control, production boundaries, and the trainer checklist. |
-
-Do not mix interactive mutations with the deterministic automation sequence. The latter reserves rounds 1, 2, and 3 and a one-time ordinary-DML example. A copied, unconfigured source package is not an operational replacement for the original deployment folder.
-
 ## Solution and data flow
 
 This is **custom CDC orchestration**, not native Fabric CDC Copy Job configuration. Fabric transports staged CDC events; stored procedures implement the replication protocol.
@@ -47,7 +35,7 @@ The diagram shows the **planned lab deployment** defined in [deploy.py](deploy.p
 - **Supporting resources:** NAT is attached to the SQL subnet for outbound downloads/updates, not inbound SQL access. Key Vault holds administrative credentials; it is **not a pipeline runtime data-flow hop**.
 - **Fabric boundary:** the workspace and pipeline are SaaS objects outside the VNet. The dedicated F8 capacity is an Azure resource backing the workspace, not a VM in the VNet. Network lines show access paths; the numbered steps show the one-way CDC processing order.
 
-Icons are from Microsoft's official [Azure Architecture Icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) and [Microsoft Fabric Icons](https://learn.microsoft.com/en-us/fabric/fundamentals/icons), used for architectural documentation. The layout is project-specific, not a Microsoft-certified reference architecture. Both assets are self-contained and use relative links for GitHub Pages.
+Icons are from Microsoft's official [Azure Architecture Icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) and [Microsoft Fabric Icons](https://learn.microsoft.com/en-us/fabric/fundamentals/icons). The layout is project-specific, not a Microsoft-certified reference architecture.
 
 ### CDC batch sequence
 
@@ -82,7 +70,7 @@ Keyless support is specific to this implementation. Do not assume native Fabric 
 | File | Purpose |
 | --- | --- |
 | [START-HERE.txt](START-HERE.txt) | Initial guidance, desktop access, networking, and costs |
-| [Topology PNG](diagrams/sql-server-cdc-topology.png), [topology SVG](diagrams/sql-server-cdc-topology.svg) | Planned Azure/Fabric architecture with official Microsoft icons; keep both assets when publishing this README |
+| [Topology PNG](diagrams/sql-server-cdc-topology.png), [topology SVG](diagrams/sql-server-cdc-topology.svg) | Planned Azure/Fabric architecture with official Microsoft icons |
 | [requirements.txt](requirements.txt) | Python dependencies |
 | [deploy.py](deploy.py) | Azure provisioning, Fabric workspace/gateway, VM administration, and deployment state |
 | [configure-sql.ps1](configure-sql.ps1) | SQL Agent, TCP, encryption, and login configuration |
@@ -102,7 +90,7 @@ Keyless support is specific to this implementation. Do not assume native Fabric 
 | [sql/validate.sql](sql/validate.sql) | Exact schema, checkpoint, and row-multiset reconciliation |
 | [sql/source-tests.sql](sql/source-tests.sql), [sql/tests.sql](sql/tests.sql) | Administrator-run source and destination safety checks |
 
-Generated files such as `deployment.json`, `infra.json`, pipeline JSON, `runs`, and result files are operational artifacts, not prerequisites shipped with a clean package. Preserve private operational state; do not publish it.
+Generated files such as `deployment.json`, `infra.json`, pipeline JSON, `runs`, and result files hold deployment state and execution results. Retain the original configured project folder and protect these artifacts: subsequent commands depend on the stored resource identities and progress.
 
 ## Prerequisites
 
@@ -115,6 +103,8 @@ Generated files such as `deployment.json`, `infra.json`, pipeline JSON, `runs`, 
 - Ability to stop all external source writers during baseline and exact reconciliation. Normal CDC operation does not require applications to use a special lock protocol.
 
 ## Build a new isolated lab
+
+For an existing deployment, keep its original configured project folder and deployment state, and follow [Resume an existing lab](#resume-an-existing-lab). Do not provision or reinstall it to resume operation.
 
 > These commands **create billable resources or change data**. Obtain the owner's approval first. Run commands individually, wait for completion, inspect results, and stop at the first error. Do not paste an entire procedure unattended or run state-writing scripts concurrently.
 
@@ -151,7 +141,7 @@ Set these placeholders in your **private working copy** of [deploy.py](deploy.py
 | `UPN` | Deploying user's sign-in name matching Azure CLI |
 | `LAB_SUFFIX` | Unique lowercase letters/digits, preferably 6–10 characters, for this isolated lab |
 
-The default identity placeholders intentionally fail the deployment guard. Keep public source parameterized; do not upload a customer-configured copy. The default region is `southeastasia`. Review all dependent settings before changing region, database names, or network addresses.
+The default identity placeholders intentionally fail the deployment guard; replace them with the intended deployment identity before provisioning. The default region is `southeastasia`. Review all dependent settings before changing region, database names, or network addresses.
 
 ### 2. Provision Azure and install SQL objects
 
@@ -244,7 +234,7 @@ In Fabric's pipeline editor, compare the deployed definition with the generated 
 | --- | --- |
 | `Prepare_CDC_batch` | Source Lookup returning `BatchId`, `FromLsn`, `ToLsn`, and `EventCount` |
 | `Copy_CDC_events_to_destination` | Select only that batch from `dbo.CdcOutbox`; upsert into `dbo.CdcStage` on `(BatchId, EventNo)` |
-| `Optional_failure_before_apply` | Controlled teaching failure; disabled by default |
+| `Optional_failure_before_apply` | Controlled failure injection before apply; disabled by default |
 | `Apply_batch_atomically` | Destination `dbo.ApplyCdcBatch` with the complete manifest |
 | `Optional_failure_after_apply` | Controlled failure after commit; disabled by default |
 | `Acknowledge_source_checkpoint` | Source `dbo.AcknowledgeCdcBatch` with the prepared `BatchId` |
@@ -273,13 +263,13 @@ Verify before continuing:
 - Both sides are bootstrapped, source has no pending batch, and their checkpoints/last batch agree after acknowledgement.
 - `Compare_destination_multisets` returns `IsValid=1`/`true`; counts are `Customers=2`, `Products=2`, `LegacyBalances=5`, `EventLog=1`.
 
-Only then may external writers resume. Keep them stopped if proceeding with the controlled exercises below. Choose **interactive labs OR fresh-lab automation**, not both on the same exercise state.
+Only then may external writers resume. Keep them stopped if proceeding with the controlled tests below. Choose **manual replication tests OR fresh-lab automation**, not both on the same test state. The automated sequence reserves rounds 1, 2, and 3 and a one-time ordinary-DML example.
 
-## Interactive hands-on labs
+## Manual replication tests
 
-Use this path for an existing demonstration or instructor-led session. Confirm the original deployment folder and Fabric workspace. Pause an existing schedule using `python fabric.py pause`; **skip that command if no schedule exists**. Wait for queued/running jobs to finish in Fabric Monitor and keep external writers stopped throughout each controlled test.
+Use these tests to verify change delivery, failure recovery, and keyless DML on a bootstrapped deployment. Confirm the original deployment folder and Fabric workspace. Pause an existing schedule using `python fabric.py pause`; **skip that command if no schedule exists**. Wait for queued/running jobs to finish in Fabric Monitor and keep external writers stopped throughout each controlled test.
 
-### Lab A: observe a new source change round
+### 1. Observe a new source change round
 
 1. Inspect both databases with the SSMS walkthrough or inspection pipeline.
 2. Choose an unused round; repeating a round intentionally makes no new business changes. The example below uses 100 only if it has not already been used.
@@ -297,9 +287,9 @@ python fabric.py run --pipeline pl_inspect_sql_demo
 
 The capture barrier writes a non-business marker and waits for CDC; it neither copies nor applies data. A quiet batch can have zero business events. Repeating round 100 is a useful no-op demonstration, not a way to generate another workload.
 
-### Lab B: recover the same batch before and after commit
+### 2. Recover the same batch before and after commit
 
-Keep scheduling and external writers paused. Use two further unused rounds (101 and 102 below), not rounds already used in Lab A or earlier sessions.
+Keep scheduling and external writers paused. Use two further unused rounds (101 and 102 below), not rounds already used in the preceding test or earlier runs.
 
 **Failure before destination apply:**
 
@@ -327,7 +317,7 @@ The destination now has the committed batch while the source still has it pendin
 
 The CLI treats only the explicitly requested injected failure as expected. Investigate any other failure. Never validate halfway through a pending nonempty batch, manually acknowledge it, or advance an LSN to bypass an uncertain commit.
 
-### Lab C: ordinary DML and SQL safety checks
+### 3. Verify ordinary DML and SQL safety checks
 
 On a lab where the one-time example has **not** already run, with no active synchronization or external writers:
 
@@ -352,7 +342,7 @@ Source checks verify three expected failures, ordinary writer DML in rollback tr
 
 ## Fresh-lab automation alternative
 
-Choose this **instead of interactive mutations**. Start after verified baseline, with no prior generator rounds, ordinary-DML example, external writers, or active schedule. Use this exact sequence:
+Choose this **instead of the manual replication tests**. Start after verified baseline, with no prior generator rounds, ordinary-DML example, external writers, or active schedule. Use this exact sequence:
 
 ```powershell
 python exercise.py manual
@@ -380,11 +370,11 @@ Expected row counts for this exact isolated sequence:
 | One-time ordinary DML | 4 | 4 | 7 | 3 |
 | Scheduled round 3 after the above | 5 | 5 | 8 | 4 |
 
-These are scenario expectations, not locally executed test results. Additional rounds or external writers invalidate these fixed counts.
+Additional rounds or external writers invalidate these fixed counts.
 
 ## Scheduling and exact reconciliation
 
-After verified baseline and the desired teaching exercises, create a schedule only if one is needed and the automated sequence has not already created it:
+After verifying baseline and completing the replication tests, create a schedule only if one is needed and the automated sequence has not already created it:
 
 ```powershell
 python fabric.py schedule
@@ -459,7 +449,7 @@ These queries are observational. The capture barrier and SQL safety suites are *
 
 ## Operator runbook and cost control
 
-Operate only the reviewed, isolated deployment with its original configured folder and `deployment.json`. Authenticate to the correct tenant/subscription first. Never copy the companion guide's reference IDs into commands or operate a shared capacity/workspace without its owner's authorization.
+Operate only the reviewed, isolated deployment with its original configured folder and `deployment.json`. Authenticate to the correct tenant/subscription first and verify resource identities against the stored deployment state. Do not operate a shared capacity/workspace without its owner's authorization.
 
 ### Resume an existing lab
 
@@ -545,32 +535,6 @@ Before production consideration, design and test transaction-aware batching, sus
 
 Evaluate native Fabric Copy Job CDC separately against its current connector, key, and supported-mode requirements. For HA/DR, assess the appropriate SQL Server architecture instead: a pipeline-maintained writable data copy is not an availability group, and SQL Standard Basic Availability Groups do not provide a readable secondary substitute.
 
-## Trainer checklist
-
-A suggested three-hour session allocates 20 minutes to architecture, 15 to prerequisites, 60 to building, 25 to functional observation, 25 to keyless/retry semantics, and 35 to operations/production boundaries. Provisioning and installation time can vary; prebuild for a shorter workshop.
-
-- Assign one operator per shared lab and one owner for state-changing commands.
-- Confirm identity, budget, tenant settings, capacity availability, and the correct new/existing learning path before the session.
-- Keep source and destination SSMS tabs visible with their different server identities.
-- Explain staging upsert versus business-row apply, all-change CDC versus net changes, and duplicate multiplicity before fault injection.
-- Reserve generator rounds and choose interactive or automated exercises; do not mix them.
-- Finish with exact reconciliation, a reviewed schedule/compute state, and named ownership for cost control and cleanup.
-
-## Publish to GitHub
-
-The intended destination is the `sql_server_cdc_replication` folder in [apamungkas.github.io](https://github.com/apamungkas/apamungkas.github.io); the repository does not need renaming. Preserve this folder's file/subfolder structure so relative links and scripts work.
-
-GitHub renders this README on the repository folder page. A website at `/sql_server_cdc_replication/` depends on the repository's existing Pages build configuration; a README alone does not guarantee that route. GitHub Pages does not execute these Python, PowerShell, SQL, or Fabric workloads.
-
-Before **every** public upload:
-
-1. Publish clean parameterized source only; restore deployment placeholders and avoid customer identities/data.
-2. Exclude `deployment.json`, `infra.json`, inventory, run/exercise/schedule results, generated pipeline definitions containing environment IDs, transport/desktop output, database dumps, and real-environment screenshots.
-3. Exclude `.venv`, `__pycache__`, `.env`, private keys/certificates, tokens/passwords, and editor configuration containing credentials.
-4. Inspect every additional file/archive. A source review does not cover artifacts generated after deployment.
-5. For Git, establish appropriate ignore rules before staging. **Ignore rules neither redact tracked files nor protect manual browser uploads.** Select uploads explicitly and inspect the staged/uploaded content.
-6. If a credential has ever been published, revoke/rotate it first; removing it from the latest revision does not remove it from history.
-
 ## References
 
 - [SQL Server connector in Fabric](https://learn.microsoft.com/en-us/fabric/data-factory/connector-sql-server-database-overview)
@@ -581,5 +545,3 @@ Before **every** public upload:
 - [Fabric Lookup activity and limits](https://learn.microsoft.com/en-us/fabric/data-factory/lookup-activity)
 - [Pause and resume Fabric capacity](https://learn.microsoft.com/en-us/fabric/enterprise/pause-resume)
 - [Fabric capacity suspend API](https://learn.microsoft.com/en-us/rest/api/microsoftfabric/fabric-capacities/suspend?view=rest-microsoftfabric-2023-11-01)
-
-Documentation was checked against the supplied source code. Azure/Fabric deployment, SQL mutations, and runtime exercises were **not executed** as part of this README update.
