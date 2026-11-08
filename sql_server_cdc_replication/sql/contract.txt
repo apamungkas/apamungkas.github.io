@@ -1,0 +1,241 @@
+SQLSYNC DEMO SQL CONTRACT - INDEPENDENT SQL SERVER 2022 STANDARD VMs
+
+Scope: these SQL files only. Partner resource/workspace names derive from LAB_SUFFIX in deploy.py.
+Source VM database SqlSyncSource; DIFFERENT destination VM database SqlSyncDestination.
+No linked servers, three-part business queries, remote INSERT, distributed transactions,
+cross-database ownership chaining, or TRUSTWORTHY ON. Never deploy into the old demo.
+No credentials are present. Provisioning, login creation and Fabric activities belong to parent.
+
+INSTALLATION (sysadmin / existing Windows-authenticated administrator)
+1. Source VM: source.sql (creates missing database/tables, enables native CDC).
+2. Destination VM: target.sql (creates missing database/tables).
+3. Source connection database SqlSyncSource: schema.sql.
+4. Destination connection database SqlSyncDestination: schema.sql.
+   This shared file has NO USE statement: run it against EACH named database explicitly.
+5. Source VM: initialize.sql, then demo-changes.sql (install procedures only).
+6. Destination VM: validate.sql (install procedure only).
+7. Source: EXEC dbo.AssertCdcConfiguration;
+   Destination: EXEC dbo.AssertBusinessSchema;
+Scripts are rerunnable; no existing data is dropped, truncated or reset.
+source.sql drops ONLY the obsolete dbo.tr_Customers_WriterLock, dbo.tr_Products_WriterLock
+and dbo.tr_LegacyBalances_WriterLock lab triggers, if present; they are not recreated.
+It preserves EventLog's append-only rule without requiring any writer application lock.
+Stop deployment on the FIRST failed batch. Do not keep running after an installation error.
+Split ONLY line-only GO, case insensitive, into separate System.Data.SqlClient commands.
+Keep one open connection per file so USE context survives its GO batches. Timeout 300 seconds.
+The source/destination principals need database metadata access only through local owner-
+executed helper procedures. TRUSTWORTHY and DB_CHAINING are explicitly OFF.
+SQL Server Agent must be running on the SOURCE VM; source.sql sets CDC cleanup retention
+to 10080 minutes (7 days). Do not enable transactional replication on this demo database.
+Capture is asynchronous (default CDC polling is ~5 seconds). Near-real-time latency also
+includes the parent Fabric pipeline interval/copy overhead; this is microbatch, not streaming.
+
+BOOTSTRAP - SAME FABRIC COPY/APPLY PATH AS EVERY LATER BATCH
+Pause pipeline and ALL source writers. Execute on SOURCE:
+    EXEC dbo.InitializeSource;
+It seeds exactly once (10 initial business rows), commits a fresh CDC marker, waits up to
+180 seconds until that marker is captured, then commits the baseline outbox/manifest.
+The exclusive SqlSync.Source session application lock spans seed, marker wait and snapshot.
+It serializes only the supplied procedures, NOT external application/ad hoc writers. The
+operator must keep ALL external writers paused throughout bootstrap until baseline Ack.
+Seed COMMIT + marker capture ensures every pre-boundary seed transaction was scanned.
+The baseline manifest FromLsn is 0x00000000000000000000; ToLsn is the marker's actual
+commit LSN (not a wall-clock guess). Each baseline event has Operation=2, StartLsn=ToLsn,
+SeqVal=zero. These are full current rows, including both identical duplicate rows.
+Run the normal Fabric pipeline below once. Fresh destination accepts ONLY a zero-to-positive-
+marker baseline with insert-only events and empty business tables; it never reloads data.
+Source IsBootstrapped remains 0 until successful destination Apply followed by source Ack.
+GenerateDemoChanges is gated until that acknowledgement. Resume writes only afterward.
+Rerunning InitializeSource after its manifest exists is a no-op, pending or acknowledged.
+A timeout after seeding can be retried safely: seed is not repeated and a new marker is used.
+Unrecognized preexisting business/control data is rejected. No automated destructive reset.
+The next CDC range starts at increment(marker LSN), so seed CDC is not reapplied.
+
+PIPELINE PUBLIC CONTRACT (UNCHANGED FOR BASELINE / EMPTY / CDC BATCHES)
+Concurrency = ONE run. Sequence must be Prepare -> Copy -> Apply -> Acknowledge, with success
+dependencies. Never acknowledge on failed Copy/Apply, cancelled/unknown Apply outcome, or a
+failed transaction. If an Apply outcome is unknown, repeat Apply with the SAME manifest first.
+No server has the other server's credentials or permission to query its database.
+
+1. SOURCE: EXEC dbo.PrepareCdcBatch;
+   Exactly ONE row / ONE result set:
+       BatchId varchar(36), FromLsn varchar(22), ToLsn varchar(22), EventCount int.
+   LSN strings have 0x prefix + 20 hexadecimal digits. Preserve this complete manifest.
+   Retrying returns the same immutable pending batch until Ack (even after CDC retention).
+2. SOURCE Copy query (bind UUID or substitute only validated UUID from step 1):
+   SELECT BatchId,EventNo,TableName,StartLsn,SeqVal,Operation,RowJson
+   FROM dbo.CdcOutbox WHERE BatchId=CONVERT(uniqueidentifier,'<BatchId>');
+   Destination sink: SqlSyncDestination.dbo.CdcStage. Write behavior UPSERT.
+   Key columns: BatchId, EventNo. Explicit same-name mappings, preserving types:
+       BatchId uniqueidentifier NOT NULL
+       EventNo int NOT NULL
+       TableName nvarchar(128) NOT NULL
+       StartLsn varbinary(10) NOT NULL
+       SeqVal varbinary(10) NOT NULL
+       Operation int NOT NULL
+       RowJson nvarchar(max) NOT NULL
+   dbo.CdcStage PK = (BatchId,EventNo); dbo.CdcOutbox has the same columns and PK.
+   Do not truncate JSON, trim strings, cast RowJson to varchar, or stringify binary columns.
+   Use the connector's physical-table upsert, not row-at-a-time ad hoc SQL concatenation.
+3. DESTINATION, only after complete successful Copy:
+   EXEC dbo.ApplyCdcBatch @BatchId=<UUID>,@FromLsn=<hex>,@ToLsn=<hex>,@EventCount=<int>;
+   Parameter types: uniqueidentifier, varchar(22), varchar(22), int.
+   Exactly one result row: BatchId varchar(36), WasReplay bit, EventCount int.
+   The business mutations, exact event audit, applied manifest and checkpoint commit atomically.
+4. SOURCE, only after successful destination commit:
+   EXEC dbo.AcknowledgeCdcBatch @BatchId=<UUID>;
+   No result set. Retry is harmless even after later batches have been acknowledged.
+   Source finds the exact immutable manifest by UUID; no caller-supplied LSN is trusted.
+   The source cannot independently verify a remote commit; the success dependency and scoped
+   permission to call Ack are the explicit trust boundary. Do NOT run Ack manually before Apply.
+
+Always run the sequence even when EventCount=0. Copy then transfers zero rows; Apply records
+the empty manifest. FromLsn=increment(checkpoint), ToLsn=checkpoint is allowed when capture
+has not advanced. Otherwise an event-free captured range may advance the checkpoint.
+One unacknowledged manifest is allowed. No outbox, manifest, stage or audit pruning in this lab.
+Do not delete or mutate staging/outbox. Copy retry upserts identical rows.
+Destination replay compares the full staged event set byte-for-byte against dbo.AppliedEvents,
+not merely its byte count/hash. Changed manifest or same-length changed JSON is rejected.
+Successful replay increments ReplayCount/LastReplayedAt and never repeats business DML.
+
+SEMANTICS / BOUNDS
+Business tables:
+    Customers: genuine CustomerId primary key.
+    Products: no primary key; unique SKU business index (updates can rename SKU).
+    LegacyBalances: entirely keyless heap, indistinguishable duplicates, NULLs, case/spaces.
+    EventLog: append-only heap, no primary/unique key. Unicode test text is built with NCHAR.
+There are no hidden source business row identifiers, identity columns or invented heap keys.
+Internal control/outbox/stage/audit metadata legitimately have primary keys.
+CDC enabled with supports_net_changes=0 on all four tables and the internal capture marker.
+Enumeration uses 'all update old'. Delete(1)/before(3) removes exactly ONE full matching row;
+insert(2)/after(4) inserts the strongly typed image. Updates are delete-before + insert-after.
+Canonical full-row JSON is compared as varbinary(max), preserving NULL/case/trailing spaces
+and UTF-16 values. It is not compared under a SQL string collation. Exact duplicate counts
+are preserved. Missing before/delete row FAILS and rolls back the WHOLE batch.
+Ordering: StartLsn, SeqVal, Operation, binary TableName, binary RowJson.
+Only fixed bounded int/nvarchar/decimal(18,2)/datetime2(3) schema is supported.
+Business column types/nullability/collations/indexes and source capture definitions are checked.
+DDL, schema evolution, LOB/computed/identity/alias types, foreign-key graph ordering, arbitrary
+business triggers, general-purpose transaction/unique-key rewrite optimization are unsupported.
+No business column uses an nvarchar(max) CDC before image (which can otherwise be incomplete).
+The fixed schema and bounded workloads define this demo; this is NOT generic production replication.
+External applications/ad hoc SQL need NO application-lock protocol or application-code changes:
+normal committed DML is captured transparently by native CDC, subject to the fixed schema,
+volume limits and EventLog's intentional append-only rule. Normal CDC operation does not
+require pausing external writers. GenerateDemoChanges provides reproducible demo mutations.
+Supplied demo writer, bootstrap, prepare, ack and snapshot procedures retain their internal
+SqlSync.Source application lock for serialization with one another; it does not fence external
+writes. The OPERATOR must pause ALL external writers for baseline and reconciliation, including
+the capture barrier/drain and source-snapshot-to-destination-validation interval.
+Destination Apply/Validate use exclusive SqlSync.Destination, plus a SERIALIZABLE transaction.
+Each batch is limited to 2000 CDC events and 2097152 bytes total DATALENGTH(RowJson).
+Update old/new images count separately. Oversized ranges FAIL without truncating or advancing;
+poll sooner / reduce write volume. Deliberate recovery requires a NEW reviewed baseline, never
+editing an LSN or silently skipping a poison batch. Retention gaps fail with errors 51012/51015.
+History is durable but grows forever in this bounded demo. Do not leave an unbounded load running.
+
+DEMO / INDEPENDENT-SERVER VALIDATION
+On source after baseline Ack:
+    EXEC dbo.GenerateDemoChanges @Round=1;
+    EXEC dbo.GenerateDemoChanges @Round=1; -- WasReplay=1, no second mutation
+    EXEC dbo.GenerateDemoChanges @Round=2;
+Round range 1..1000000, durable once-only round history. All four tables change. Customers,
+Products and LegacyBalances exercise insert/update/delete; EventLog is insert-only by design.
+The baseline starts with 2 identical LegacyBalances rows; round 1 deletes only one.
+Each round creates 2 identical new heap rows then deletes one. NULL-bearing and exact-case
+rows are updated while the distinct lower-case/trailing-space seed row remains unchanged.
+After ONLY rounds 1 and 2 (including a harmless repeat of round 1), expected row counts are:
+Customers=4, Products=4, LegacyBalances=6, EventLog=3. Round 1 emits 19 CDC images and round 2
+emits 18; together they produce 37 events if prepared in one fully captured batch.
+
+For a deterministic drain, pause writers and run on SOURCE:
+    DECLARE @Lsn varbinary(10);
+    EXEC dbo.WaitForCdcCapture @CapturedLsn=@Lsn OUTPUT;
+Then execute the normal pipeline (repeat if an earlier batch was already pending).
+SOURCE: EXEC dbo.GetReplicaSnapshot;
+Exactly ONE result row / ONE result set, SnapshotJson nvarchar(max).
+Snapshot contains ContractVersion=1, source checkpoint/last BatchId, table column/type/
+nullability/collation/PK/unique-key metadata, and grouped COMPLETE full-row UTF-16 hex images
+with COUNT_BIG multiplicity. No checksum or hash substitutes for the actual data.
+It inserts/waits for its own fresh capture barrier under the internal procedure lock, and rejects
+undrained business CDC, retention gaps, and pending nonempty batches. If it reports undrained
+CDC, keep writes paused, run pipeline, and retry. Pending empty batch is safe only while not
+applied ahead of source Ack. Finish Ack before validation to match both LSN and last BatchId.
+Snapshot bound: 2000 business rows / 2 MiB raw row JSON; final snapshot max 8 MiB.
+The 8 MiB SQL defensive bound is NOT a guarantee that a snapshot can travel through Fabric
+Lookup. Fabric Lookup output is limited to 4 MB and 5000 rows; exceeding its size limit fails
+the activity, even for one SnapshotJson row. Account for JSON escaping and output-envelope
+overhead, not just SQL DATALENGTH. Keep the actual baseline + a few demo rounds well below
+that limit (the documented rounds 1 and 2 leave only 17 business rows). Check the actual
+serialized Lookup output size if expanding the demo; do not approach the 8 MiB SQL bound.
+Larger snapshots require a separately reviewed transport, not an assumption that Lookup fits.
+External writers MUST already be paused: the procedure lock alone cannot make their writes
+quiescent while the capture barrier and snapshot execute.
+GetReplicaSnapshot must not run inside a transaction (capture barrier needs committed log).
+Parent passes SnapshotJson intact between INDEPENDENT Fabric connections:
+DESTINATION: EXEC dbo.ValidateReplica @SourceSnapshot=<bound nvarchar(max) parameter>;
+Use a Script/stored-procedure parameter large enough for nvarchar(max), not SQL concatenation.
+One summary row on success; THROW on mismatch. Compares schemas, keys, acknowledged/applied
+checkpoints and last BatchId, then both directions of grouped complete-row sets INCLUDING
+multiplicity. Summary: IsValid bit, Validation nvarchar, CheckpointLsn varchar(22),
+ValidatedAtUtc datetime2, Customers bigint, Products bigint, LegacyBalances bigint, EventLog bigint.
+Keep writes AND pipeline paused between source snapshot and destination validation.
+Diagnostics in either database: EXEC dbo.GetReplicationStatus; (one row, no secrets).
+
+RUNTIME USER fabric_cdc (parent creates login + database user independently on each server)
+Source, required:
+    GRANT SELECT ON OBJECT::dbo.CdcOutbox TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.PrepareCdcBatch TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.AcknowledgeCdcBatch TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.GetReplicaSnapshot TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.GetReplicationStatus TO fabric_cdc;
+Source, optional only for parent demo orchestration:
+    GRANT EXECUTE ON OBJECT::dbo.GenerateDemoChanges TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.WaitForCdcCapture TO fabric_cdc;
+InitializeSource is an administrator-only bootstrap; do not grant it routinely.
+Prepare/snapshot/barrier and metadata helpers execute AS OWNER ONLY WITHIN THEIR OWN database.
+No db_owner/sysadmin, CDC role, business-table SELECT/DML, or remote permissions for fabric_cdc.
+Destination:
+    GRANT SELECT,INSERT,UPDATE ON OBJECT::dbo.CdcStage TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.ApplyCdcBatch TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.ValidateReplica TO fabric_cdc;
+    GRANT EXECUTE ON OBJECT::dbo.GetReplicationStatus TO fabric_cdc;
+Use Fabric SQL Server sink existing-table upsert; no db_ddladmin/ALTER business tables needed.
+If the connector's selected interim-table/bulk path demands broader privileges, parent must
+explicitly review/scope those connector-specific grants; prefer pre-existing staging tables.
+Only execute public routines, not internal helpers, as fabric_cdc. Runtime connection needs
+CONNECT database normally supplied by its user mapping; preserve existing users on reinstall.
+
+TEST COMMANDS (run each file using the same GO splitter; pipeline/writers stopped)
+Run both test files as administrator on their respective servers; do not broaden fabric_cdc
+permissions to permit direct test DML or rollback-only DDL.
+After full installation and baseline delivery:
+    Source connection: execute source-tests.sql (three expected failures plus ordinary-writer DML).
+source-tests.sql retains invalid-round, unknown-acknowledgement and EventLog append-only
+checks. Without taking an application lock, it INSERTs/UPDATEs/DELETEs actual temporary
+business rows on Customers, Products and LegacyBalances (including identical duplicates),
+and INSERTs EventLog, all in a ROLLBACK transaction. It then verifies exact source business
+multisets/schema are unchanged. ExpectedFailuresVerified=3 and OrdinaryWriterDmlVerified=1.
+    Destination connection: execute tests.sql.
+tests.sql checks bad manifests/count/ranges, missing/extra staging, missing-before rollback
+(business rows + audit + checkpoint), overlong row image, invalid table, incomplete update,
+oversized payload, transactional schema drift rollback, committed replay, SAME-LENGTH altered
+replay rejection/restoration, full multiset/schema/checkpoint mismatch validation.
+The tests construct a local envelope only as a unit fixture; REAL reconciliation MUST use the
+source SnapshotJson delivered to destination. No cross-server query occurs in either case.
+Target tests need administrator rights for rollback-only DDL and stage tamper/restoration.
+They retain only normal replay audit updates; synthetic staging is removed on success/failure.
+End-to-end proof:
+    1. Bootstrap and normal pipeline; get source snapshot -> validate on destination.
+    2. Run rounds 1,1,2 above; drain with barrier and normal pipeline.
+    3. Source GetReplicaSnapshot -> destination ValidateReplica; expect IsValid=1.
+    4. Run both test files; rerun end-to-end snapshot/validation after tests.
+    5. Query GetReplicationStatus on each server; checkpoints/last BatchId match, PendingBatches=0.
+Static installation review was performed locally; actual engine/Fabric execution is the parent's
+responsibility once the two VMs exist. Do not claim cloud tests passed before executing them.
+
+REFERENCES CONSULTED
+https://learn.microsoft.com/sql/relational-databases/track-changes/enable-and-disable-change-data-capture-sql-server
+https://learn.microsoft.com/sql/relational-databases/system-functions/cdc-fn-cdc-get-all-changes-capture-instance-transact-sql
+https://learn.microsoft.com/sql/relational-databases/system-stored-procedures/sys-sp-cdc-change-job-transact-sql
+https://learn.microsoft.com/fabric/data-factory/lookup-activity
