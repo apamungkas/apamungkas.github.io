@@ -6,7 +6,7 @@ The scenario is post-migration replication: a customer moving SQL Server from AW
 
 > **Synthetic-data lab/POC, not a production-ready replication service.** This project does not migrate an AWS database, replace every DMS capability, or provide HA/DR, automatic failover, or a latency SLA.
 
-This README consolidates the build, exercises, and operating procedures in the [Microsoft SQL Sync Partner Guide](Microsoft-SQL-Sync-Partner-Guide.docx), checked against the supplied scripts. The guide's reference deployment identifiers are deliberately not reproduced here. **Review/redact its deployment appendix before publishing the Word document.**
+This README consolidates the build, exercises, and operating procedures, checked against the supplied scripts.
 
 ## Choose a learning path
 
@@ -24,14 +24,32 @@ This is **custom CDC orchestration**, not native Fabric CDC Copy Job configurati
 
 | Component | Lab implementation |
 | --- | --- |
-| Source | `vm-sqlsync-src`, database `SqlSyncSource`, private endpoint `10.74.30.4,1433` |
-| Destination | `vm-sqlsync-dst`, database `SqlSyncDestination`, private endpoint `10.74.30.5,1433` |
+| Source | `vm-sqlsync-src`, database `SqlSyncSource`, private SQL address `10.74.30.4,1433` |
+| Destination | `vm-sqlsync-dst`, database `SqlSyncDestination`, private SQL address `10.74.30.5,1433` |
 | Capture | Native SQL Server CDC; source SQL Server Agent must be running |
 | Orchestration | `pl_cdc_sync`, one synchronization run at a time |
 | Transport | SQL Server Copy Activity through a Fabric VNet Data Gateway |
 | Apply | Destination stored procedure with transactional business changes and durable audit |
 | Cadence | One-minute scheduled microbatches, not streaming or guaranteed one-minute lag |
 | Infrastructure | Two SQL Standard PAYG VMs, dedicated Fabric F8, VNet, gateway, Key Vault, NAT, and Bastion Basic |
+
+### Architecture and network topology
+
+The diagram shows the **planned lab deployment** defined in [deploy.py](deploy.py) and the CDC orchestration in [fabric.py](fabric.py), not a live Azure inventory. `<suffix>` represents the configured `LAB_SUFFIX`; the region shown is the script's default, Southeast Asia.
+
+![Planned SQL Server CDC topology: Azure Bastion administers two private SQL VMs; a Fabric pipeline accesses both through a delegated VNet data gateway subnet, with separate NAT, Key Vault, and Fabric capacity resources.](diagrams/sql-server-cdc-topology.png)
+
+[Open full-size PNG](diagrams/sql-server-cdc-topology.png) · [Open scalable SVG](diagrams/sql-server-cdc-topology.svg)
+
+- **Azure boundary:** `rg-sqlsync-<suffix>` contains the VNet and supporting Azure resources. `vnet-sqlsync` (`10.74.30.0/24`) has separate SQL, Fabric gateway, and Bastion subnets. Both VMs run SQL Server 2022 Standard on Windows Server 2022 and have **no public IP**.
+- **Blue — data access:** Fabric connects through `gw_sqlsync_<suffix>` to **both** private SQL addresses over TLS/TCP 1433. The gateway subnet is delegated to `Microsoft.PowerPlatform/vnetaccesslinks`; the network symbol represents that VNet integration, **not an Azure VPN gateway**. There is no direct SQL connection or linked server between the VMs.
+- **Green — administration:** the administrator uses HTTPS 443 to Bastion, then private RDP 3389 to each VM. SSMS runs inside the VM and connects to `localhost`. `nsg-sqlsync` is attached to **both VM NICs, not the SQL subnet**, allowing SQL from the gateway subnet and RDP from the Bastion subnet only.
+- **Supporting resources:** NAT is attached to the SQL subnet for outbound downloads/updates, not inbound SQL access. Key Vault holds administrative credentials; it is **not a pipeline runtime data-flow hop**.
+- **Fabric boundary:** the workspace and pipeline are SaaS objects outside the VNet. The dedicated F8 capacity is an Azure resource backing the workspace, not a VM in the VNet. Network lines show access paths; the numbered steps show the one-way CDC processing order.
+
+Icons are from Microsoft's official [Azure Architecture Icons](https://learn.microsoft.com/en-us/azure/architecture/icons/) and [Microsoft Fabric Icons](https://learn.microsoft.com/en-us/fabric/fundamentals/icons), used for architectural documentation. The layout is project-specific, not a Microsoft-certified reference architecture. Both assets are self-contained and use relative links for GitHub Pages.
+
+### CDC batch sequence
 
 Each batch follows this order:
 
@@ -63,8 +81,8 @@ Keyless support is specific to this implementation. Do not assume native Fabric 
 
 | File | Purpose |
 | --- | --- |
-| [Microsoft-SQL-Sync-Partner-Guide.docx](Microsoft-SQL-Sync-Partner-Guide.docx) | Companion build/training guide; review reference identifiers and redistribution rights before sharing |
 | [START-HERE.txt](START-HERE.txt) | Initial guidance, desktop access, networking, and costs |
+| [Topology PNG](diagrams/sql-server-cdc-topology.png), [topology SVG](diagrams/sql-server-cdc-topology.svg) | Planned Azure/Fabric architecture with official Microsoft icons; keep both assets when publishing this README |
 | [requirements.txt](requirements.txt) | Python dependencies |
 | [deploy.py](deploy.py) | Azure provisioning, Fabric workspace/gateway, VM administration, and deployment state |
 | [configure-sql.ps1](configure-sql.ps1) | SQL Agent, TCP, encryption, and login configuration |
@@ -549,10 +567,9 @@ Before **every** public upload:
 1. Publish clean parameterized source only; restore deployment placeholders and avoid customer identities/data.
 2. Exclude `deployment.json`, `infra.json`, inventory, run/exercise/schedule results, generated pipeline definitions containing environment IDs, transport/desktop output, database dumps, and real-environment screenshots.
 3. Exclude `.venv`, `__pycache__`, `.env`, private keys/certificates, tokens/passwords, and editor configuration containing credentials.
-4. **Review/redact the companion Word guide separately.** Its reference-deployment appendix contains environment identifiers; confirm redistribution permission for its content/assets before publishing. The earlier clean-source review did not cover this newly added document, and identifiers are not proof of an exposed credential.
-5. Inspect every additional file/archive. A source review does not cover artifacts generated after deployment. If the Word guide is withheld, remove/update its links in the published copy.
-6. For Git, establish appropriate ignore rules before staging. **Ignore rules neither redact tracked files nor protect manual browser uploads.** Select uploads explicitly and inspect the staged/uploaded content.
-7. If a credential has ever been published, revoke/rotate it first; removing it from the latest revision does not remove it from history.
+4. Inspect every additional file/archive. A source review does not cover artifacts generated after deployment.
+5. For Git, establish appropriate ignore rules before staging. **Ignore rules neither redact tracked files nor protect manual browser uploads.** Select uploads explicitly and inspect the staged/uploaded content.
+6. If a credential has ever been published, revoke/rotate it first; removing it from the latest revision does not remove it from history.
 
 ## References
 
@@ -565,4 +582,4 @@ Before **every** public upload:
 - [Pause and resume Fabric capacity](https://learn.microsoft.com/en-us/fabric/enterprise/pause-resume)
 - [Fabric capacity suspend API](https://learn.microsoft.com/en-us/rest/api/microsoftfabric/fabric-capacities/suspend?view=rest-microsoftfabric-2023-11-01)
 
-Documentation was checked against the supplied guide and source code. Azure/Fabric deployment, SQL mutations, and runtime exercises were **not executed** as part of this README update.
+Documentation was checked against the supplied source code. Azure/Fabric deployment, SQL mutations, and runtime exercises were **not executed** as part of this README update.
