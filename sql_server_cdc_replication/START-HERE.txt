@@ -1,0 +1,101 @@
+SQL SYNC PARTNER LAB - CLEAN SOURCE PACKAGE
+
+Read Microsoft-SQL-Sync-Partner-Guide.docx before provisioning.
+This package never deploys automatically when extracted.
+No live deployment.json, infra.json, inventory, run evidence, credential values
+or brandkit files are included.
+
+FRESH ISOLATED PARTNER LAB
+1. Extract to a NEW Windows folder, not the existing reference project.
+2. Authenticate Azure CLI to your intended tenant and subscription.
+3. Edit deploy.py: SUB, TENANT, USER_ID, UPN and LAB_SUFFIX.
+   The placeholder identity intentionally fails the deployment identity guard.
+   Use a unique LOWER-CASE ALPHANUMERIC suffix of roughly 6-10 characters.
+   Example shape: p01a7429 (choose your own globally unique value).
+   Resource group, Key Vault, capacity, Fabric workspace, gateway and connection
+   display names derive from this suffix. Keep REGION southeastasia unless you
+   have checked all regional prerequisites.
+4. Create a Python environment and install requirements.txt.
+5. Follow Chapter 6 / Appendix C of the Word guide. Fresh provision includes
+   Azure Bastion Basic. After configuring and installing SQL on both VMs, run:
+     python deploy.py ssms --role source
+     python deploy.py ssms --role target
+   Continue the original private Fabric gateway, connection, pipeline and
+   baseline sequence. Do not mix initial baseline with a reused live lab.
+6. Approve two SQL Standard PAYG VMs, F8, Bastion Basic, its dedicated Standard
+   static public IPv4 and supporting charges. Bastion bills hourly even idle.
+7. Pause scheduling and external writers before baseline/exact reconciliation.
+
+EXISTING DEPLOYMENT - ADD DESKTOP ACCESS WITHOUT REPROVISIONING
+Use that deployment's original configured folder and saved deployment.json,
+not a new unconfigured extraction. Run these commands SEQUENTIALLY:
+  python deploy.py bastion
+  python deploy.py ssms --role source
+  python deploy.py ssms --role target
+bastion waits for completion and is safe to rerun. Keep existing credentials;
+never rerun provision, configure or SQL install just to add desktop access.
+Never delete deployment.json or remove its protection to force reprovisioning.
+Desktop setup reuses SSMS 18/19/20/21/22 if present; otherwise it installs the
+signed official SSMS 22 bootstrapper from
+https://aka.ms/ssms/22/release/vs_SSMS.exe with --quiet --wait --norestart.
+Existing VMs are not restarted and synchronized business data is not reset.
+
+BROWSER SQL INSPECTION - SSMS INSIDE EACH PRIVATE VM
+1. The authorized deploying administrator opens the lab's Key Vault in Azure
+   portal > Secrets > source-vm-admin-password or target-vm-admin-password
+   > current version > Show Secret Value. Use the matching, separate VM secret.
+   Never embed passwords in scripts, ZIP, documentation or screenshots.
+2. In Azure portal open vm-sqlsync-src > Connect > Bastion. Use RDP, username
+   sqlsyncadmin and the SOURCE VM password. Connect to its browser desktop.
+3. Repeat for vm-sqlsync-dst with the TARGET VM password in a second session.
+   No RDP client, VPN or SSMS installation on the laptop is needed.
+4. Open Desktop "SQL Server Management Studio.lnk" (or Start > SSMS) in EACH VM:
+     Server: localhost; authentication: Windows Authentication.
+     Source: sqlsyncsrc\sqlsyncadmin; database: SqlSyncSource.
+     Target: sqlsyncdst\sqlsyncadmin; database: SqlSyncDestination.
+   Enable Encryption / Mandatory and Trust server certificate for this demo's
+   self-signed TLS ONLY, not Strict. Production requires a trusted server
+   certificate and normal client certificate validation.
+5. Object Explorer > Databases > matching database > Tables. Use Select Top
+   1000 Rows for Customers, Products, LegacyBalances and EventLog, NOT Edit Top
+   200 Rows. Open Desktop "SQL Sync - Inspect.sql" or C:\SQLSyncDemo\inspect.sql.
+   These are the role-specific read-only inspect-source.sql/inspect-target.sql.
+6. Compare separate server identities, rows, keys, CDC information and
+   checkpoints. Generate SOURCE changes through Fabric, synchronize, then
+   re-execute the queries in both sessions. NEVER mutate destination data,
+   staging, outbox, audit or checkpoints. Exact multiset reconciliation still
+   uses pl_validate_replica with writers/schedule paused and active runs drained.
+   Close/sign out both VM sessions after the demonstration.
+Reader permissions on VM/NIC/Bastion, VM login rights and separate authorized
+Key Vault secret access are required.
+
+PRIVATE NETWORK BOUNDARIES
+The two VM names, computer/database names and static 10.74.30.0/24 network stay
+unchanged inside your isolated resource group. Do not peer overlapping networks.
+SQL subnet: 10.74.30.0/27; Fabric delegated gateway: 10.74.30.32/27.
+AzureBastionSubnet: 10.74.30.64/26, dedicated and with no NSG attached.
+bastion-sqlsync Basic uses pip-sqlsync-bastion (Standard static public IPv4).
+Laptop HTTPS 443 -> Bastion -> private RDP 3389 -> VM SSMS -> localhost.
+VM NIC NSG: SQL allow from .32/27 priority 100; RDP allow ONLY from .64/26
+priority 110; deny other SQL 120; deny other RDP 130.
+Guest Windows RDP uses NLA and a firewall scoped to the Bastion subnet.
+Neither VM has a public IP. External SQL remains Fabric-only. NAT is egress-only.
+Changing schema/database/network values requires coordinated dependent edits.
+
+CDC AND OPERATIONAL SAFETY
+Run commands sequentially when they update deployment.json.
+Do not mix interactive and fresh automated exercises when expecting recorded
+clean-lab row counts. normal-writes.sql is a one-time committed keyless DML
+example, not an inspection query.
+Inspection SQL returns multiple result sets for SSMS/administrator Run Command,
+not Fabric Lookup. Source capture-barrier.sql inserts a marker and waits;
+it is NOT read-only and should not be substituted for the inspection scripts.
+
+COST CONTROL
+Disabling/expiring the Fabric schedule does not stop VM or capacity charges.
+Deallocating VMs/suspending Fabric does NOT stop Bastion or its IP billing.
+After closing sessions, delete ONLY the demo bastion-sqlsync and its dedicated
+pip-sqlsync-bastion to end those access charges. Keep deployment state; later
+python deploy.py bastion can redeploy access. Never delete the NAT egress IP,
+VNet, shared capacity, unrelated workspace or another learner's resources.
+Full shutdown/teardown remain deliberate owner-approved operations.
