@@ -7,16 +7,15 @@
     <meta name="description" content="Hands-on labs and demos covering IoT, Microsoft Fabric digital twins, SQL Server CDC replication, and Azure AI Foundry.">
     <style>
         :root {
-            --bg: #0b1020;
-            --bg-soft: #121a33;
-            --card: #161f3d;
-            --card-hover: #1d2952;
-            --text: #e6ebf5;
-            --muted: #9aa7c7;
-            --accent: #4f9cff;
-            --accent-2: #7c5cff;
-            --border: #26304f;
-            --tag: #1f2c52;
+            color-scheme: light;
+            --bg: #ffffff;
+            --bg-soft: #f7f9fc;
+            --text: #182230;
+            --muted: #526174;
+            --accent: #245ac5;
+            --accent-hover: #19469f;
+            --border: #e1e7ef;
+            --tag: #f2f5f9;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,53 +29,66 @@
         }
 
         a { color: inherit; text-decoration: none; }
+        a:focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; }
+        html { scroll-padding-top: 24px; }
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
 
-        .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+        .skip-link {
+            position: absolute;
+            top: 12px;
+            left: 16px;
+            z-index: 10;
+            transform: translateY(-180%);
+            background: var(--text);
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 6px;
+        }
+        .skip-link:focus { transform: translateY(0); }
 
-        /* Hero */
-        header.hero {
-            position: relative;
-            overflow: hidden;
-            padding: 96px 0 72px;
-            background:
-                radial-gradient(1200px 500px at 15% -10%, rgba(124, 92, 255, 0.25), transparent 60%),
-                radial-gradient(1000px 500px at 90% 0%, rgba(79, 156, 255, 0.22), transparent 55%),
-                var(--bg);
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            min-height: 80px;
             border-bottom: 1px solid var(--border);
         }
+        .wordmark { font-size: 16px; font-weight: 700; letter-spacing: -0.03em; }
+        .nav-links { display: flex; gap: 24px; font-size: 14px; color: var(--muted); }
+        .nav-links a { display: inline-flex; align-items: center; min-height: 44px; }
+        .nav-links a:hover, footer a:hover { color: var(--accent); }
+
+        /* Hero */
+        header.hero { padding: 68px 0 0; }
 
         .eyebrow {
             display: inline-block;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 600;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: var(--accent);
-            background: rgba(79, 156, 255, 0.1);
-            border: 1px solid rgba(79, 156, 255, 0.3);
-            padding: 6px 12px;
-            border-radius: 999px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         h1 {
-            font-size: clamp(32px, 6vw, 52px);
+            font-size: clamp(40px, 6vw, 64px);
+            font-weight: 700;
             line-height: 1.1;
-            letter-spacing: -0.02em;
-            background: linear-gradient(90deg, #ffffff, #b9c6ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            letter-spacing: -0.05em;
         }
 
         .hero p.lead {
-            margin-top: 18px;
-            max-width: 640px;
-            font-size: clamp(16px, 2.2vw, 19px);
+            margin-top: 22px;
+            max-width: 700px;
+            font-size: clamp(16px, 2vw, 18px);
+            line-height: 1.8;
             color: var(--muted);
         }
 
         /* Section */
-        main { padding: 64px 0 96px; }
+        main { padding: 56px 0 64px; }
 
         .section-head {
             display: flex;
@@ -87,72 +99,76 @@
             flex-wrap: wrap;
         }
 
-        .section-head h2 { font-size: 24px; letter-spacing: -0.01em; }
-        .section-head .count { color: var(--muted); font-size: 14px; }
+        .section-head h2 { font-size: 26px; letter-spacing: -0.03em; }
+        .section-head .count { color: var(--muted); font-size: 13px; }
 
         /* Grid */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 22px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
         }
 
         .card {
             display: flex;
             flex-direction: column;
-            background: var(--card);
+            min-width: 0;
+            background: var(--bg);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 26px;
-            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-            height: 100%;
+            border-radius: 12px;
+            padding: 30px;
+            transition: box-shadow 0.18s ease, border-color 0.18s ease;
         }
 
-        .card:hover {
-            transform: translateY(-4px);
-            background: var(--card-hover);
-            border-color: rgba(79, 156, 255, 0.5);
+        .card:hover, .card:focus-within {
+            border-color: #a9bfdf;
+            box-shadow: 0 6px 24px rgba(24, 34, 48, 0.05);
         }
 
         .card .icon {
-            width: 48px;
-            height: 48px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
-            font-size: 24px;
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            margin-bottom: 18px;
+            border-radius: 10px;
+            font-size: 22px;
+            background: #edf3ff;
+            margin-bottom: 20px;
         }
+        .card:nth-child(2) .icon { background: #edf8f2; }
+        .card:nth-child(3) .icon { background: #fff6e8; }
+        .card:nth-child(4) .icon { background: #f2effb; }
 
-        .card h3 { font-size: 20px; letter-spacing: -0.01em; }
+        .card h3 { font-size: 21px; line-height: 1.4; letter-spacing: -0.025em; }
 
         .card p.desc {
-            margin-top: 10px;
+            margin-top: 12px;
             color: var(--muted);
             font-size: 15px;
+            line-height: 1.75;
             flex-grow: 1;
         }
 
         .tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 18px;
+            gap: 6px;
+            margin-top: 22px;
         }
 
         .tag {
             font-size: 12px;
             color: var(--muted);
             background: var(--tag);
-            border: 1px solid var(--border);
-            padding: 4px 10px;
-            border-radius: 999px;
+            padding: 4px 9px;
+            border-radius: 5px;
         }
 
         .card .actions {
-            margin-top: 22px;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
@@ -161,107 +177,90 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 14px;
+            min-height: 44px;
             font-size: 14px;
             font-weight: 600;
-            padding: 9px 16px;
-            border-radius: 10px;
-            transition: background 0.15s ease, border-color 0.15s ease;
+            padding: 10px 16px;
+            border-radius: 6px;
+            transition: background 0.15s ease;
         }
 
-        .btn.primary {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            color: #fff;
-        }
-        .btn.primary:hover { filter: brightness(1.08); }
-
-        .btn.ghost {
-            border: 1px solid var(--border);
-            color: var(--text);
-        }
-        .btn.ghost:hover { border-color: var(--accent); }
-
+        .btn.primary { background: var(--accent); color: #fff; }
+        .btn.primary:hover { background: var(--accent-hover); }
         .arrow { transition: transform 0.15s ease; }
         .btn:hover .arrow { transform: translateX(3px); }
 
         /* Stats */
         .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 24px;
             margin-top: 44px;
+            padding: 28px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
         }
-        .stat .num {
-            font-size: 30px;
-            font-weight: 700;
-            line-height: 1.1;
-            background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        .stat .label { color: var(--muted); font-size: 14px; margin-top: 4px; }
+        .stat .num { font-size: 26px; font-weight: 600; line-height: 1.2; letter-spacing: -0.03em; }
+        .stat .label { color: var(--muted); font-size: 13px; margin-top: 6px; }
 
         /* Section intro */
-        .section-head p.sub { color: var(--muted); font-size: 15px; margin-top: 6px; max-width: 620px; }
+        .section-head p.sub { color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 640px; }
 
         /* Coming soon card */
         .card.soon {
-            border-style: dashed;
-            background: transparent;
-            justify-content: center;
+            grid-column: 1 / -1;
+            background: var(--bg-soft);
+            border-color: transparent;
+            padding: 24px 30px;
         }
-        .card.soon:hover { transform: none; background: rgba(255, 255, 255, 0.02); border-color: var(--border); }
+        .card.soon:hover { box-shadow: none; border-color: transparent; }
         .card.soon .badge {
             align-self: flex-start;
-            font-size: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
             color: var(--muted);
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            padding: 4px 10px;
-            margin-bottom: 14px;
+            margin-bottom: 8px;
         }
-        .card.soon h3 { color: var(--muted); }
+        .card.soon h3 { font-size: 18px; }
+        .card.soon p.desc { max-width: 720px; margin-top: 6px; }
+        .card.soon .tags { margin-top: 14px; }
 
         /* Band */
-        .band { border-top: 1px solid var(--border); background: var(--bg-soft); }
-        .band .wrap { padding-top: 72px; padding-bottom: 72px; }
-        .band h2 { font-size: 24px; letter-spacing: -0.01em; }
-        .band p.sub { color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 640px; }
+        .band { border-top: 1px solid var(--border); }
+        .band .wrap { padding-top: 56px; padding-bottom: 56px; }
+        .band h2 { font-size: 24px; letter-spacing: -0.03em; }
+        .band p.sub { color: var(--muted); font-size: 15px; margin-top: 8px; max-width: 700px; }
 
         /* Steps */
         .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 28px;
             margin-top: 32px;
         }
-        .step {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 22px;
-        }
+        .step { border-top: 2px solid var(--border); padding-top: 20px; }
         .step .n {
-            width: 32px; height: 32px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 8px;
-            font-weight: 700; font-size: 14px; color: #fff;
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            margin-bottom: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 12px;
         }
-        .step h4 { font-size: 16px; margin-bottom: 6px; }
-        .step p { color: var(--muted); font-size: 14px; }
+        .step h3 { font-size: 16px; margin-bottom: 8px; }
+        .step p { color: var(--muted); font-size: 14px; line-height: 1.75; }
 
         /* Tech chips */
-        .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
         .chip {
-            font-size: 14px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            background: var(--card);
+            font-size: 13px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            background: var(--bg);
             border: 1px solid var(--border);
-            color: var(--text);
+            color: var(--muted);
         }
 
         /* Footer */
@@ -278,10 +277,45 @@
             flex-wrap: wrap;
             gap: 12px;
         }
+        footer a { overflow-wrap: anywhere; }
+
+        @media (max-width: 760px) {
+            .wrap { padding-left: 24px; padding-right: 24px; }
+            header.hero { padding-top: 44px; }
+            .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .grid { grid-template-columns: minmax(0, 1fr); }
+            .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            main { padding-top: 40px; padding-bottom: 44px; }
+            .card { padding: 24px; }
+            .card.soon { padding: 24px; }
+            .band .wrap { padding-top: 40px; padding-bottom: 40px; }
+        }
+
+        @media (max-width: 420px) {
+            .wrap { padding-left: 20px; padding-right: 20px; }
+            .site-nav { min-height: 68px; gap: 12px; }
+            .nav-links { gap: 16px; font-size: 13px; }
+            .steps { grid-template-columns: minmax(0, 1fr); }
+            .card, .card.soon { padding: 20px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { transition: none !important; }
+        }
     </style>
 </head>
 <body>
-    <header class="hero">
+    <a class="skip-link" href="#demos">Skip to demos</a>
+    <div class="wrap">
+        <nav class="site-nav" aria-label="Main navigation">
+            <a class="wordmark" href="#top">Angger's Lab<span aria-hidden="true">.</span></a>
+            <div class="nav-links">
+                <a href="#demos">Demos</a>
+                <a href="https://github.com/apamungkas/apamungkas.github.io">GitHub <span aria-hidden="true">↗</span></a>
+            </div>
+        </nav>
+    </div>
+    <header class="hero" id="top">
         <div class="wrap">
             <span class="eyebrow">Labs &amp; Demos</span>
             <h1>Angger's Lab</h1>
@@ -311,7 +345,7 @@
         </div>
     </header>
 
-    <main>
+    <main id="demos" tabindex="-1">
         <div class="wrap">
             <div class="section-head">
                 <div>
@@ -430,7 +464,6 @@
 
                 <article class="card soon">
                     <span class="badge">Coming soon</span>
-                    <div class="icon">🤖</div>
                     <h3>More demos in the works</h3>
                     <p class="desc">
                         New labs exploring Azure AI agents, real-time analytics, and edge
@@ -455,29 +488,29 @@
             <div class="steps">
                 <div class="step">
                     <div class="n">1</div>
-                    <h4>Capture</h4>
+                    <h3>Capture</h3>
                     <p>Devices and factory machines produce telemetry, while SQL Server CDC captures database changes.</p>
                 </div>
                 <div class="step">
                     <div class="n">2</div>
-                    <h4>Move</h4>
+                    <h3>Move</h3>
                     <p>IoT Hub, Azure Functions, and Eventstream route telemetry; Fabric pipelines copy staged CDC events through a VNet data gateway.</p>
                 </div>
                 <div class="step">
                     <div class="n">3</div>
-                    <h4>Process</h4>
+                    <h3>Process</h3>
                     <p>Eventhouse and digital twin models support telemetry analysis; stored procedures apply CDC batches to the destination SQL Server.</p>
                 </div>
                 <div class="step">
                     <div class="n">4</div>
-                    <h4>Act</h4>
+                    <h3>Act</h3>
                     <p>Dashboards and Activator workflows support operational responses; CDC audit and reconciliation checks help verify the replicated data.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="band" style="background: var(--bg);">
+    <section class="band">
         <div class="wrap">
             <h2>Built with</h2>
             <p class="sub">The technologies powering the labs across this portal.</p>
